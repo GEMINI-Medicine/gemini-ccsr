@@ -1,0 +1,4 @@
+Queried ICD,Deciding Relationship,ccsr_def,ccsr_def_desc,ccsr_1,ccsr_1_desc,ccsr_2,ccsr_2_desc,ccsr_3,ccsr_3_desc,ccsr_4,ccsr_4_desc,ccsr_5,ccsr_5_desc,ccsr_6,ccsr_6_desc
+A010,Descendant,INF003,Bacterial infections,INF003,Bacterial infections,,,,,,,,,,
+A022,Descendant,INF003,Bacterial infections,INF003,Bacterial infections,,,,,,,,,,
+C44001,Ancestor,NEO028,Skin cancers - all other types,NEO028,Skin cancers - all other types,,,,,,,,,,
