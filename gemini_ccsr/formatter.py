@@ -210,8 +210,6 @@ def add_default(edit_ccsr, official_ccsr):
         The edit_ccsr input DataFrame with a CCSR default category
         column added.
     """
-    if len(edit_ccsr) == 0 or len(official_ccsr) == 0:
-        raise ValueError('At least one input dataframe is empty.')
     edit_ccsr = edit_ccsr.copy()
     default_map = get_default_map(official_ccsr)
     ccsr_cols = ['ccsr_{}'.format(i) for i in range(1, 7)]
