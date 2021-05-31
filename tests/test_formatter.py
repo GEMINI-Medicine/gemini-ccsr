@@ -57,9 +57,9 @@ class TestFormatter(unittest.TestCase):
         assert_frame_equal(res, self.ccsr)
 
     def test_add_default_empty(self):
-        with self.assertRaises(ValueError):
-            formatter.add_default(
-                pd.DataFrame(columns=self.ccsr.columns), self.ccsr)
+        res = formatter.add_default(
+            pd.DataFrame(columns=self.ccsr.columns), self.ccsr)
+        self.assertEqual(len(res), 0)
 
     def test_add_descs_valid(self):
         use_cols = [col for col in self.ccsr.columns
