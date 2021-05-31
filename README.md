@@ -1,4 +1,4 @@
-![Build Status](https://github.com/GEMINI-Medicine/gemini-ccsr/workflows/python-app.yml/badge.svg)
+[![Python application](https://github.com/GEMINI-Medicine/gemini-ccsr/actions/workflows/python-app.yml/badge.svg)](https://github.com/GEMINI-Medicine/gemini-ccsr/actions/workflows/python-app.yml)
 
 # gemini-ccsr
 Maps from International Classification of Diseases 10th Revision (ICD10) codes to Clinical Classifications Software Refined (CCSR) categories. 
