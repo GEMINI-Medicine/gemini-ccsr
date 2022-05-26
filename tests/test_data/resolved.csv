@@ -2,3 +2,5 @@ Queried ICD,Deciding Relationship,ccsr_def,ccsr_def_desc,ccsr_1,ccsr_1_desc,ccsr
 A010,Descendant,INF003,Bacterial infections,INF003,Bacterial infections,,,,,,,,,,
 A022,Descendant,INF003,Bacterial infections,INF003,Bacterial infections,,,,,,,,,,
 C44001,Ancestor,NEO028,Skin cancers - all other types,NEO028,Skin cancers - all other types,,,,,,,,,,
+A1520,Extended Family,INF001,Tuberculosis,INF001,Tuberculosis,,,,,,,,,,
+A1521,Extended Family,INF001,Tuberculosis,INF001,Tuberculosis,,,,,,,,,,

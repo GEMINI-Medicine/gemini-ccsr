@@ -216,7 +216,7 @@ def add_default(edit_ccsr, official_ccsr):
     edit_ccsr['ccsr_tup'] = edit_ccsr[ccsr_cols].apply(
         lambda row: tuple(sorted(row[row.notna()].to_list())), axis=1)
     edit_ccsr['ccsr_def'] = edit_ccsr['ccsr_tup'].apply(
-        lambda tup: default_map.get(tup, None))
+        lambda tup: default_map.get(tup, 'XXX000'))
     edit_ccsr = edit_ccsr.drop(columns=['ccsr_tup'])
     return edit_ccsr
 
