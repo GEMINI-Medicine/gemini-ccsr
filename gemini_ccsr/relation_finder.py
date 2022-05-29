@@ -178,7 +178,6 @@ def get_predicted(unmapped, ccsr, verbose):
     related_close = unmapped.sort_values('icd')
     related_close[['Deciding Relationship', 'ccsr_1','ccsr_2', 'ccsr_3', 'ccsr_4', 'ccsr_5', 'ccsr_6','Related Codes']] = None
         
-    cols = ['ccsr_1', 'ccsr_2', 'ccsr_3', 'ccsr_4', 'ccsr_5', 'ccsr_6']
     closefam_resolved = pd.DataFrame(columns = ['ccsr_1', 'ccsr_2', 'ccsr_3', 'ccsr_4', 'ccsr_5', 'ccsr_6','Deciding Relationship','Queried ICD','Related Codes'])
     closefam_unresolved = pd.DataFrame([])
     closefam_failed = pd.DataFrame(columns = ['Queried ICD'])
