@@ -1,23 +1,25 @@
 from gemini_ccsr import relation_finder
 from gemini_ccsr import formatter
-
+import pandas as pd
 
 def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
     """Tries to predict the CCSR mapping of each ICD 10 code.
 
     If a code is in the official_ccsr dataframe, then its CCSR mapping
     is returned.
+    
+    If it is not in the official_ccsr dataframe, the code is checked for
+    close relatives (ancestors, descendants, or siblings) with known CCSR 
+    mappings. If no close relatives are found, it is checked for distant 
+    relatives (half-siblings, cousins, extended family). If no close/distant
+    relatives are found, the code is returned in the failed DataFrame.
 
-    If a code has no close relatives (ancestors, descendants, or
-    siblings) with known CCSR mappings, then it is returned in the
-    failed DataFrame.
-
-    If it has ancestors, descedants, or siblings with known CCSR
+    If it has close/distant relatives with known CCSR
     mappings but each of these groups' members have no CCSR category in
     common, then it is returned (along with information about each of
     its relatives) in the unresolved DataFrame.
 
-    If it has ancestors, descendants, or siblings with known CCSR
+    If it has close/distant relatives with known CCSR
     mappings and one of these groups' members have one or more
     categories in common, then that code is mapped to those categories
     and returned in the resolved DataFrame.
@@ -118,11 +120,20 @@ def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
     """
     official_ccsr = formatter.check_ccsr(official_ccsr)
     query_icd = formatter.check_icd(query_icd)
+    # 1) Identify direct mappings -> return anything else as unmapped
     direct, unmapped = relation_finder.get_direct_unmapped(
         query_icd, official_ccsr)
-    resolved, unresolved, failed = relation_finder.get_predicted(
-        unmapped, official_ccsr, verbose)
-    resolved = formatter.add_default(resolved, official_ccsr)
-    resolved = formatter.add_descs(resolved, official_ccsr)
-    unresolved = formatter.add_descs(unresolved, official_ccsr)
+    # 2) Find codes in official CCSR file that are (closely/distantly) related to unmapped codes
+    if not unmapped.empty: # only if there are any codes that couldn't be mapped directly
+        resolved, unresolved, failed = relation_finder.get_predicted(
+            unmapped, official_ccsr, verbose)
+        # For resolved codes: Add default CCSR category based on existing combinations of CCSR1-6 in CCSR file -> if combination does not exist, use CCSR1 as default
+        if not resolved.empty:
+            resolved = formatter.add_default(resolved, official_ccsr)
+            resolved = formatter.add_descs(resolved, official_ccsr,True)
+        if not unresolved.empty:
+            unresolved = formatter.add_descs(unresolved, official_ccsr,False)
+    else: # return empty data frame if all codes could be mapped directly
+        resolved = unresolved = failed = pd.DataFrame([])
+        
     return direct, resolved, unresolved, failed
