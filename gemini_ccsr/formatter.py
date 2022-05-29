@@ -42,7 +42,7 @@ def get_default_map(official_ccsr):
     official_ccsr = official_ccsr[['ccsr_def'] + ccsr_cols].drop_duplicates()
     ccsr_defaults = official_ccsr[['ccsr_def']].copy()
     ccsr_defaults['ccsr_tup'] = official_ccsr[ccsr_cols].apply(
-        lambda row: tuple(sorted(row[row.notna()].to_list())), axis=1)
+        lambda row: tuple(sorted(row[(row.notna()) & (row != ' ')].to_list())), axis=1)
     default_map = ccsr_defaults.set_index('ccsr_tup').to_dict()['ccsr_def']
     return default_map
 
@@ -98,7 +98,7 @@ def get_desc_df(official_ccsr):
     return ccsr_desc
 
 
-def add_descs(edit_ccsr, official_ccsr):
+def add_descs(edit_ccsr, official_ccsr, resolved):
     """Adds CCSR descriptions to a DataFrame with CCSR columns.
 
     Parameters
@@ -146,7 +146,12 @@ def add_descs(edit_ccsr, official_ccsr):
     """
     ccsr_desc_df = get_desc_df(official_ccsr)
     ccsr_desc_map = ccsr_desc_df.set_index('ccsr').to_dict()['ccsr_desc']
-    ccsr_colnames = ['ccsr_{}'.format(i) for i in range(1, 7)]
+    if resolved:
+        ccsr_colnames = ['ccsr_{}'.format(i) for i in range(1, 7)]
+    else:
+        ccsr_colnames = ['ccsr_1']
+        
+
     if not set(ccsr_colnames).issubset(edit_ccsr.columns):
         raise ValueError('No recognized ccsr columns.')
     if 'ccsr_def' in edit_ccsr.columns:
@@ -210,14 +215,47 @@ def add_default(edit_ccsr, official_ccsr):
         The edit_ccsr input DataFrame with a CCSR default category
         column added.
     """
+    
+        
     edit_ccsr = edit_ccsr.copy()
     default_map = get_default_map(official_ccsr)
     ccsr_cols = ['ccsr_{}'.format(i) for i in range(1, 7)]
     edit_ccsr['ccsr_tup'] = edit_ccsr[ccsr_cols].apply(
-        lambda row: tuple(sorted(row[row.notna()].to_list())), axis=1)
+        lambda row: tuple(sorted(row[row.notna()].to_list())), axis=1) # add all mapped CCSR1-6 codes as tuple in last column
+    
+    
+    ### ANNE CHANGED!
+    #edit_ccsr['ccsr_def'] = edit_ccsr['ccsr_tup'].apply(
+    #    lambda tup: default_map.get(tup, 'XXX000')) # replace with XXX000 if specified key does not exist in default map 
     edit_ccsr['ccsr_def'] = edit_ccsr['ccsr_tup'].apply(
-        lambda tup: default_map.get(tup, 'XXX000'))
+        lambda tup: default_map.get(tup, None)) # replace with None if specified key does not exist in default map 
+    
+    
+    
+    iterator = edit_ccsr.loc[edit_ccsr['ccsr_def'].isna(),'Queried ICD']
+
+    for icd in iterator:
+        
+        # if only 1 shared category (CCSR1, but not CCSR2) -> use that one as default
+        if pd.isnull(edit_ccsr.loc[edit_ccsr['Queried ICD'] == icd,'ccsr_2']).bool():
+            edit_ccsr.loc[edit_ccsr['Queried ICD'] == icd,'ccsr_def'] = edit_ccsr.loc[edit_ccsr['Queried ICD'] == icd,'ccsr_1']
+    
+        # if more than one shared category, which one of shared categories is most commonly default among related codes?
+        else:
+            rel_tup = edit_ccsr.loc[edit_ccsr['Queried ICD'] == icd]['Related Codes'].values[0]
+            rel = official_ccsr.loc[official_ccsr['icd'].isin(rel_tup)]
+            
+            # get categories that are shared between all related codes
+            shared_cat = edit_ccsr.loc[edit_ccsr['Queried ICD'] == icd,'ccsr_tup'].values[0]
+            # are any of the shared categories default categories? If yes, which one most frequent one?
+            shared_def = rel.loc[rel['ccsr_def'].isin(shared_cat),'ccsr_def']
+            if not shared_def.empty:
+                edit_ccsr.loc[edit_ccsr['Queried ICD'] == icd,'ccsr_def'] = shared_def.value_counts().sort_values(ascending = False).index[0]   
+                
+            
     edit_ccsr = edit_ccsr.drop(columns=['ccsr_tup'])
+        
+    
     return edit_ccsr
 
 
@@ -283,6 +321,8 @@ def check_ccsr(ccsr):
     ccsr : pd.DataFrame
         The input DataFrame with `only` the mandatory columns.
     """
+    
+    #ccsr = ccsr.replace(r'^\s*$', np.nan, regex=True)
     ccsr[(ccsr == 'NA') | (ccsr == '')] = None
     ccsr = ccsr.where(pd.notnull(ccsr), None)
     cols = ['icd', 'ccsr_def', 'ccsr_def_desc',
