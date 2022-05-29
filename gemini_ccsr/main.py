@@ -9,7 +9,7 @@ def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
     is returned.
     
     If it is not in the official_ccsr dataframe, the code is checked for
-    close relatives (ancestors, descendants, or siblings) with known CCSR 
+    close relatives (children, siblings, or parents) with known CCSR 
     mappings. If no close relatives are found, it is checked for distant 
     relatives (half-siblings, cousins, extended family). If no close/distant
     relatives are found, the code is returned in the failed DataFrame.

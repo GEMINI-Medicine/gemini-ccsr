@@ -60,17 +60,16 @@ def get_direct_unmapped(icd, ccsr):
 def get_predicted(unmapped, ccsr, verbose):
     """Tries to predict the CCSR mapping of each ICD 10 code.
 
-    If a code has no close relatives (ancestors,
-    descendants, or siblings) with known CCSR mappings, then it is
-    returned in the failed DataFrame. If it has
-    ancestors, descedants, or siblings with
-    known CCSR mappings but each of these groups' members have no CCSR
+    If a code has no close relatives (children,
+    parents, or siblings) or distant relatives (half-siblings, cousins,
+    extended family) with known CCSR mappings, then it is returned in the 
+    failed DataFrame. If it has close/distant relatives with known CCSR,
+    mappings but each of these groups' members have no CCSR
     category in common, then it is returned (along with information
     about each of its relatives) in the unresolved DataFrame. If it has
-    ancestors, descendants, or siblings with known CCSR mappings and one
-    of these groups' members have one or more categories in common, then
-    that code is mapped to those categories and returned in the resolved
-    DataFrame.
+    close/distant relatives with known CCSR mappings and one of these
+    groups' members have one or more categories in common, then that code
+    is mapped to those categories and returned in the resolved DataFrame.
 
 
     Parameters
@@ -191,7 +190,7 @@ def get_predicted(unmapped, ccsr, verbose):
         
         
     # loop through each unmapped ICD code and check agreement among closely related codes' CCSR categories
-    # starting with descendants, then siblings, then ancestors
+    # starting with children, then siblings, then parents
     for icd in iterator:
         
         icd_related = get_closely_related(icd, ccsr, verbose)
@@ -202,9 +201,9 @@ def get_predicted(unmapped, ccsr, verbose):
         icd_relation_temp = pd.DataFrame([]) # keep track of all categories that occured among any close relatives
         
         if not icd_related.empty: # if any close relationships found
-            for relation in ['Descendant', 'Sibling', 'Ancestor']:
+            for relation in ['Child', 'Sibling', 'Parent']:
                 icd_relation = icd_related[icd_related['Relationship'] == relation]
-                #print(len(icd_relation)) # number of desc/sibl/ancestors
+                #print(len(icd_relation)) # number of children/sibl/parents
                 if len(icd_relation) == 0: # check if close family member exists, if not, check next close family group
                     continue
                 
@@ -213,7 +212,7 @@ def get_predicted(unmapped, ccsr, verbose):
                 code_counts = icd_relation[
                     ccsr_colnames].stack().value_counts() 
                 agreed_codes = code_counts[
-                    code_counts == len(icd_relation)].index.to_list() # identify CCSR1-6 categories that match across all desc/sibl/ancestor codes (CCSR categories don't need to be in same order)
+                    code_counts == len(icd_relation)].index.to_list() # identify CCSR1-6 categories that match across all children/sibl/parent codes (CCSR categories don't need to be in same order)
                 
                 if agreed_codes:
                     agreed_codes.extend((6 - len(agreed_codes))*[None]) 
@@ -282,7 +281,7 @@ def get_predicted(unmapped, ccsr, verbose):
     
     
         # loop through each unmapped ICD code and check agreement among distantly related codes' CCSR categories
-        # starting with descendants, then siblings, then ancestors
+        # starting with half-siblings, then cousins, then extended family
         for icd in iterator:
             
             icd_related = get_distantly_related(icd, ccsr, verbose) # get related codes of queried ICD code
@@ -374,7 +373,7 @@ def get_predicted(unmapped, ccsr, verbose):
 def get_closely_related(unmapped, ccsr, verbose):
     """Finds the close relatives of each ICD 10 code.
 
-    Close relatives are defined as descendants, siblings, or ancestors.
+    Close relatives are defined as children, siblings, or parents.
 
     Parameters
     ----------
@@ -413,7 +412,7 @@ def get_closely_related(unmapped, ccsr, verbose):
     Returns
     -------
     related_df: pd.DataFrame
-        The descendants, siblings, and ancestors of the unmapped
+        The children, siblings, and parents of the unmapped
         ICD 10 codes.
 
         =============  =================================================
@@ -433,7 +432,7 @@ def get_closely_related(unmapped, ccsr, verbose):
     """
     related_df = pd.DataFrame([])
     
-    for func in [get_descendants, get_sibs, get_ancs]:
+    for func in [get_children, get_sibs, get_parents]:
         related = func(unmapped, ccsr)
         if related is not None:
             if related_df.empty:
@@ -445,8 +444,8 @@ def get_closely_related(unmapped, ccsr, verbose):
     return related_df
 
 
-def get_descendants(icd, ccsr):
-    """Finds the descendants of a given ICD 10 code.
+def get_children(icd, ccsr):
+    """Finds the children of a given ICD 10 code.
 
     Parameters
     ----------
@@ -469,11 +468,11 @@ def get_descendants(icd, ccsr):
     Returns
     -------
     related: pd.DataFrame
-        The descendants of the unmapped ICD 10 codes.
+        The children of the unmapped ICD 10 codes.
 
         =============  =================================================
         Queried ICD    The ICD 10 code given in icd.
-        Relationship   "Descendant".
+        Relationship   "Child".
         icd            ICD 10 code (as `str`)
         ccsr_1         CCSR category 1 (as `str`)
         ccsr_2         CCSR category 2 (as `str`)
@@ -491,7 +490,7 @@ def get_descendants(icd, ccsr):
         generation = descs[descs['icd'].str.len() == len(icd) + gen_num]
         if len(generation) > 0:
             related = generation.drop(columns=['ccsr_def'])
-            related.insert(loc=0, column='Relationship', value='Descendant')
+            related.insert(loc=0, column='Relationship', value='Child')
             related.insert(loc=0, column='Queried ICD', value=icd)
             return related
     return None
@@ -545,8 +544,8 @@ def get_sibs(icd, ccsr):
     return related
 
 
-def get_ancs(icd, ccsr):
-    """Finds the ancestors of a given ICD 10 code.
+def get_parents(icd, ccsr):
+    """Finds the parents of a given ICD 10 code.
 
     Parameters
     ----------
@@ -569,11 +568,11 @@ def get_ancs(icd, ccsr):
     Returns
     -------
     related: pd.DataFrame
-        The ancestors of the unmapped ICD 10 codes.
+        The parents of the unmapped ICD 10 codes.
 
         =============  =================================================
         Queried ICD    The ICD 10 code given in icd.
-        Relationship   "Ancestor".
+        Relationship   "Parent".
         icd            ICD 10 code (as `str`)
         ccsr_1         CCSR category 1 (as `str`)
         ccsr_2         CCSR category 2 (as `str`)
@@ -588,7 +587,7 @@ def get_ancs(icd, ccsr):
         generation = ccsr[ccsr['icd'] == icd[:str_len]]
         if len(generation) > 0:
             related = generation.drop(columns=['ccsr_def'])
-            related.insert(loc=0, column='Relationship', value='Ancestor')
+            related.insert(loc=0, column='Relationship', value='Parent')
             related.insert(loc=0, column='Queried ICD', value=icd)
             return related
     return None
