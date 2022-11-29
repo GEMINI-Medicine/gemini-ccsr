@@ -127,7 +127,7 @@ def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
     if not unmapped.empty: # only if there are any codes that couldn't be mapped directly
         automatic, semiautomatic, failed = relation_finder.get_predicted(
             unmapped, official_ccsr, verbose)
-        # For resolved codes: Add default CCSR category based on existing combinations of CCSR1-6 in CCSR file -> if combination does not exist, use CCSR1 as default
+        # For automatic codes: Add default CCSR category based on existing combinations of CCSR1-6 in CCSR file -> if combination does not exist, use CCSR1 as default
         if not automatic.empty:
             automatic = formatter.add_default(automatic, official_ccsr)
             automatic = formatter.add_descs(automatic, official_ccsr,True)
