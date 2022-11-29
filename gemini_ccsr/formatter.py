@@ -98,7 +98,7 @@ def get_desc_df(official_ccsr):
     return ccsr_desc
 
 
-def add_descs(edit_ccsr, official_ccsr, resolved):
+def add_descs(edit_ccsr, official_ccsr, automatic):
     """Adds CCSR descriptions to a DataFrame with CCSR columns.
 
     Parameters
@@ -146,7 +146,7 @@ def add_descs(edit_ccsr, official_ccsr, resolved):
     """
     ccsr_desc_df = get_desc_df(official_ccsr)
     ccsr_desc_map = ccsr_desc_df.set_index('ccsr').to_dict()['ccsr_desc']
-    if resolved:
+    if automatic:
         ccsr_colnames = ['ccsr_{}'.format(i) for i in range(1, 7)]
     else:
         ccsr_colnames = ['ccsr_1']
@@ -224,9 +224,6 @@ def add_default(edit_ccsr, official_ccsr):
         lambda row: tuple(sorted(row[row.notna()].to_list())), axis=1) # add all mapped CCSR1-6 codes as tuple in last column
     
     
-    ### ANNE CHANGED!
-    #edit_ccsr['ccsr_def'] = edit_ccsr['ccsr_tup'].apply(
-    #    lambda tup: default_map.get(tup, 'XXX000')) # replace with XXX000 if specified key does not exist in default map 
     edit_ccsr['ccsr_def'] = edit_ccsr['ccsr_tup'].apply(
         lambda tup: default_map.get(tup, None)) # replace with None if specified key does not exist in default map 
     
