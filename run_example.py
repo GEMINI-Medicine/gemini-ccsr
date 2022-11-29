@@ -14,7 +14,7 @@ ccsr = pd.read_csv('example_ccsr_v2020-3.csv', dtype= 'str')
 
 ## List of ICD codes that should be mapped
 # provide list...
-#icd = ['A020','A021','C440','A010','A022','C44001','A1520','A1521', 'C440','E90']
+#icd = ['A010','A020','A021','A022','A1520','A1521', 'C440','C44001','E90']
 
 # ... or read .csv file containing ICD codes to be mapped
 icd = pd.read_csv('tests/test_data/codes_to_map.csv', dtype= 'str'); 
