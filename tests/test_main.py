@@ -24,7 +24,7 @@ class TestMain(unittest.TestCase):
     failed = pd.read_csv(
         'tests/test_data/failed.csv', dtype=str).replace({np.nan: None})
     icd = pd.concat(
-        [direct, automatic, semiautomatic, failed])['Queried ICD'].astype(str)
+        [direct, automatic, semiautomatic, failed])['Queried ICD'].astype(str).unique()
 
     def test_map_icd_to_ccsr_verbose(self):
         _ = main.map_icd_to_ccsr(self.icd, self.ccsr, verbose=True)

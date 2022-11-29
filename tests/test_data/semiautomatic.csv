@@ -1,4 +1,3 @@
 Queried ICD,Prct_fam_agree,Relationships,ccsr_1,ccsr_1_desc
-C441,50,Close,NEO028,Skin cancers - all other types
-C441,25,Close,NEO026,Skin cancers - basal cell carcinoma
-C441,25,Close,NEO027,Skin cancers - squamous cell carcinoma
+C767,80,Close,NEO069,Cancer of other sites
+C767,20,Close,NEO010,Head and neck cancers - all other types
