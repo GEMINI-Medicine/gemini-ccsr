@@ -359,7 +359,7 @@ def get_predicted(unmapped, ccsr, verbose):
     automatic = automatic[['Queried ICD', 'Deciding Relationship', 'ccsr_1',
                         'ccsr_2', 'ccsr_3', 'ccsr_4', 'ccsr_5', 'ccsr_6','Related Codes']]
     
-    automatic.sort_values(["Queried ICD"],axis = 0, ascending = [True],inplace = True,na_position = "first")
+    automatic.sort_values(["Queried ICD"],axis = 0, ascending = [True],inplace = True,ignore_index=True)
     
     # semiautomatic
     semiautomatic = pd.DataFrame(columns = ['Queried ICD','ccsr_1','Prct_fam_agree','Relationships'])
@@ -367,11 +367,12 @@ def get_predicted(unmapped, ccsr, verbose):
         distfam_unresolved]).reset_index(drop=True)
     
     semiautomatic.sort_values(["Queried ICD", "Prct_fam_agree","ccsr_1"],axis = 0, ascending = [True,False,True],
-               inplace = True,na_position = "first")
+               inplace = True,ignore_index=True)
     
     # failed (don't include closefam_failed here because some of those would have been mapped automatically using distant family relationship(!))
-    failed = distfam_failed.sort_values(["Queried ICD"],axis = 0, ascending = True,
-               inplace = True,na_position = "first") 
+    failed = distfam_failed
+    failed.sort_values(["Queried ICD"],axis = 0, ascending = True,
+               inplace = True,ignore_index=True) 
     
     
     return automatic, semiautomatic, failed
