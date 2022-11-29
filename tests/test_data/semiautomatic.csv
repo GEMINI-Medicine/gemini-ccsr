@@ -1,4 +1,4 @@
 Queried ICD,Prct_fam_agree,Relationships,ccsr_1,ccsr_1_desc
-C440,50.0,Close,NEO028,Skin cancers - all other types
-C440,25.0,Close,NEO026,Skin cancers - basal cell carcinoma
-C440,25.0,Close,NEO027,Skin cancers - squamous cell carcinoma
+C441,50,Close,NEO028,Skin cancers - all other types
+C441,25,Close,NEO026,Skin cancers - basal cell carcinoma
+C441,25,Close,NEO027,Skin cancers - squamous cell carcinoma
