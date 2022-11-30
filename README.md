@@ -24,6 +24,7 @@ from gemini_ccsr.main import map_icd_to_ccsr
 
 # ICD codes that should be mapped
 icd = ['A000', 'A001', 'A0101', 'A085']
+
 # Official CCSR categorization file
 ccsr = pd.read_csv(<ccsr_filepath>)
 
@@ -38,4 +39,4 @@ direct, automatic, semiautomatic, failed = map_icd_to_ccsr(icd, ccsr)
 [MIT](https://choosealicense.com/licenses/mit/)
 
 ## Version
-Version 1.0 - November 2022
+Version 1.0 (beta) - November 2022
