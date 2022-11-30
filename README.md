@@ -39,4 +39,4 @@ direct, automatic, semiautomatic, failed = map_icd_to_ccsr(icd, ccsr)
 [MIT](https://choosealicense.com/licenses/mit/)
 
 ## Version
-Version 1.0 (beta) - November 2022
+Version v1.0.0-beta - November 2022
