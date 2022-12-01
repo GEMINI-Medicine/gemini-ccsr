@@ -2,7 +2,7 @@
 
 # GEMINI: CCSR mapping code (beta version)
 
-The code in this repository maps diagnosis codes from International Classification of Diseases 10th Revision (ICD10) codes to Clinical Classifications Software Refined (CCSR) categories. For more details, please refer to this paper [Malecki et al. (2022)](LINK)
+The code in this repository maps diagnosis codes from International Classification of Diseases 10th Revision (ICD10) codes to Clinical Classifications Software Refined (CCSR) categories. For more details, please refer to this paper [Malecki et al. (2022). Tools for categorization of diagnostic codes in hospital data: Operationalizing CCSR into a patient data repository.](https://medrxiv.org/cgi/content/short/2022.11.29.22282888v1)
 
 Note: The current release is a beta version and is subject to change. 
 
@@ -33,7 +33,7 @@ direct, automatic, semiautomatic, failed = map_icd_to_ccsr(icd, ccsr)
 
 ## Citation
 
-[Malecki et al. (2022)](LINK)
+[Malecki et al. (2022). Tools for categorization of diagnostic codes in hospital data: Operationalizing CCSR into a patient data repository.](https://medrxiv.org/cgi/content/short/2022.11.29.22282888v1)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
