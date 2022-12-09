@@ -1,6 +1,6 @@
 Queried ICD,Deciding Relationship,Related Codes,ccsr_def,ccsr_def_desc,ccsr_1,ccsr_1_desc,ccsr_2,ccsr_2_desc,ccsr_3,ccsr_3_desc,ccsr_4,ccsr_4_desc,ccsr_5,ccsr_5_desc,ccsr_6,ccsr_6_desc
-A010,Child,"['A0100', 'A0101', 'A0102', 'A0103', 'A0104', 'A0105', 'A0109']",INF003,Bacterial infections,INF003,Bacterial infections,,,,,,,,,,
-A022,Child,"['A0220', 'A0221', 'A0222', 'A0223', 'A0224', 'A0225', 'A0229']",INF003,Bacterial infections,INF003,Bacterial infections,,,,,,,,,,
-A1520,Cousin,"['A150', 'A154', 'A155', 'A156', 'A157', 'A158', 'A159']",INF001,Tuberculosis,INF001,Tuberculosis,,,,,,,,,,
-A1521,Cousin,"['A150', 'A154', 'A155', 'A156', 'A157', 'A158', 'A159']",INF001,Tuberculosis,INF001,Tuberculosis,,,,,,,,,,
-C44001,Parent,['C4400'],NEO028,Skin cancers - all other types,NEO028,Skin cancers - all other types,,,,,,,,,,
+A010,Children,"['A0100', 'A0101', 'A0102', 'A0103', 'A0104', 'A0105', 'A0109']",INF003,Bacterial infections,INF003,Bacterial infections,,,,,,,,,,
+A022,Children,"['A0220', 'A0221', 'A0222', 'A0223', 'A0224', 'A0225', 'A0229']",INF003,Bacterial infections,INF003,Bacterial infections,,,,,,,,,,
+A1520,Cousins,"['A150', 'A154', 'A155', 'A156', 'A157', 'A158', 'A159']",INF001,Tuberculosis,INF001,Tuberculosis,,,,,,,,,,
+A1521,Cousins,"['A150', 'A154', 'A155', 'A156', 'A157', 'A158', 'A159']",INF001,Tuberculosis,INF001,Tuberculosis,,,,,,,,,,
+C44001,Parents,['C4400'],NEO028,Skin cancers - all other types,NEO028,Skin cancers - all other types,,,,,,,,,,
