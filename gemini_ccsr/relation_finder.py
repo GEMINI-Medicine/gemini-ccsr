@@ -440,7 +440,7 @@ def get_closely_related(unmapped, ccsr, verbose):
     """
     related_df = pd.DataFrame([])
     
-    for func in [get_children, get_sibs, get_ancs]:
+    for func in [get_children, get_sibs, get_parents]:
         related = func(unmapped, ccsr)
         if related is not None:
             if related_df.empty:
@@ -552,7 +552,7 @@ def get_sibs(icd, ccsr):
     return related
 
 
-def get_ancs(icd, ccsr):
+def get_parents(icd, ccsr):
     """Finds the parents of a given ICD 10 code.
 
     Parameters
