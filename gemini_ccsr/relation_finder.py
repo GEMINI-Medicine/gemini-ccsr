@@ -202,7 +202,7 @@ def get_predicted(unmapped, ccsr, verbose):
         icd_relation_temp = pd.DataFrame([]) # keep track of all categories that occured among any close relatives
         
         if not icd_related.empty: # if any close relationships found
-            for relation in ['Child', 'Sibling', 'Parent']:
+            for relation in ['Children', 'Siblings', 'Parents']:
                 icd_relation = icd_related[icd_related['Relationship'] == relation]
                 #print(len(icd_relation)) # number of children/sibl/parents
                 if len(icd_relation) == 0: # check if close family member exists, if not, check next close family group
@@ -293,7 +293,7 @@ def get_predicted(unmapped, ccsr, verbose):
             icd_relation_temp = pd.DataFrame([]) # keep track of all categories that occured among any close relatives
             
             if not icd_related.empty: # if any distant relationships found
-                for relation in ['Half-Sibling','Cousin','Extended Family']:
+                for relation in ['Half-Siblings','Cousins','Extended Family']:
                     icd_relation = icd_related[icd_related['Relationship'] == relation]
                     #print(len(icd_relation)) # number of half-siblings/cousins/ext. fam.
                     if len(icd_relation) == 0: # check if distant family member exists, if not, check next distant family group
@@ -480,7 +480,7 @@ def get_children(icd, ccsr):
 
         =============  =================================================
         Queried ICD    The ICD 10 code given in icd.
-        Relationship   "Child".
+        Relationship   "Children".
         icd            ICD 10 code (as `str`)
         ccsr_1         CCSR category 1 (as `str`)
         ccsr_2         CCSR category 2 (as `str`)
@@ -498,7 +498,7 @@ def get_children(icd, ccsr):
         generation = child[child['icd'].str.len() == len(icd) + gen_num]
         if len(generation) > 0:
             related = generation.drop(columns=['ccsr_def'])
-            related.insert(loc=0, column='Relationship', value='Child')
+            related.insert(loc=0, column='Relationship', value='Children')
             related.insert(loc=0, column='Queried ICD', value=icd)
             return related
     return None
@@ -532,7 +532,7 @@ def get_sibs(icd, ccsr):
 
         =============  =================================================
         Queried ICD    The ICD 10 code given in icd.
-        Relationship   "Sibling".
+        Relationship   "Siblings".
         icd            ICD 10 code (as `str`)
         ccsr_1         CCSR category 1 (as `str`)
         ccsr_2         CCSR category 2 (as `str`)
@@ -547,7 +547,7 @@ def get_sibs(icd, ccsr):
     if len(sibs) == 0:
         return None
     related = sibs.drop(columns=['ccsr_def'])
-    related.insert(loc=0, column='Relationship', value='Sibling')
+    related.insert(loc=0, column='Relationship', value='Siblings')
     related.insert(loc=0, column='Queried ICD', value=icd)
     return related
 
@@ -580,7 +580,7 @@ def get_parents(icd, ccsr):
 
         =============  =================================================
         Queried ICD    The ICD 10 code given in icd.
-        Relationship   "Parent".
+        Relationship   "Parents".
         icd            ICD 10 code (as `str`)
         ccsr_1         CCSR category 1 (as `str`)
         ccsr_2         CCSR category 2 (as `str`)
@@ -595,7 +595,7 @@ def get_parents(icd, ccsr):
         generation = ccsr[ccsr['icd'] == icd[:str_len]]
         if len(generation) > 0:
             related = generation.drop(columns=['ccsr_def'])
-            related.insert(loc=0, column='Relationship', value='Parent')
+            related.insert(loc=0, column='Relationship', value='Parents')
             related.insert(loc=0, column='Queried ICD', value=icd)
             return related
     return None
@@ -706,7 +706,7 @@ def get_halfsibs(icd, ccsr):
 
         =============  =================================================
         Queried ICD    The ICD 10 code given in icd.
-        Relationship   "Half-Sibling".
+        Relationship   "Half-Siblings".
         icd            ICD 10 code (as `str`)
         ccsr_1         CCSR category 1 (as `str`)
         ccsr_2         CCSR category 2 (as `str`)
@@ -731,7 +731,7 @@ def get_halfsibs(icd, ccsr):
     if len(halfsibs) == 0:
         return None
     related = halfsibs.drop(columns=['ccsr_def'])
-    related.insert(loc=0, column='Relationship', value='Half-Sibling')
+    related.insert(loc=0, column='Relationship', value='Half-Siblings')
     related.insert(loc=0, column='Queried ICD', value=icd)
     return related
 
@@ -764,7 +764,7 @@ def get_cousins(icd, ccsr):
 
         =============  =================================================
         Queried ICD    The ICD 10 code given in icd.
-        Relationship   "Half-Sibling".
+        Relationship   "Half-Siblings".
         icd            ICD 10 code (as `str`)
         ccsr_1         CCSR category 1 (as `str`)
         ccsr_2         CCSR category 2 (as `str`)
@@ -783,7 +783,7 @@ def get_cousins(icd, ccsr):
     if len(cousins) == 0:
         return None
     related = cousins.drop(columns=['ccsr_def'])
-    related.insert(loc=0, column='Relationship', value='Cousin')
+    related.insert(loc=0, column='Relationship', value='Cousins')
     related.insert(loc=0, column='Queried ICD', value=icd)
     
     return related
@@ -817,7 +817,7 @@ def get_extfam(icd, ccsr):
 
         =============  =================================================
         Queried ICD    The ICD 10 code given in icd.
-        Relationship   "Half-Sibling".
+        Relationship   "Half-Siblings".
         icd            ICD 10 code (as `str`)
         ccsr_1         CCSR category 1 (as `str`)
         ccsr_2         CCSR category 2 (as `str`)
