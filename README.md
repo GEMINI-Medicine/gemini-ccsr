@@ -10,12 +10,7 @@ Note: The current release is a beta version and is subject to change.
 
 Please download or clone the repository to a local directory (`/path/to/gemini-ccsr/`). Run `pip3 install --user /path/to/gemini-ccsr/` to install.
 
-Check `run_example.py` for an example of how to map a list of ICD-10 diagnosis codes (in `example_codes_to_map.csv`) to CCSR categories. Please see the documentation for a description of the four dataframes returned by the main function `map_icd_to_ccsr`. Codes that are returned in the semiautomatic/failed dataframes will need to be carefully reviewed, and may need to be mapped manually (see [here](https://medrxiv.org/cgi/content/short/2022.11.29.22282888v1) for more details). 
-
-## CCSR version
-
-By default, the code will map ICD-10 diagnosis codes to CCSR version v2020-3. To change the CCSR version, please download the latest CCSR categorization file from the [CCSR website](https://www.hcup-us.ahrq.gov/toolssoftware/ccsr/dxccsr.jsp). Please make sure that the CCSR file has been formatted to match the description found in the [documentation](https://github.com/GEMINI-Medicine/gemini-ccsr/blob/master/docs/build/html/index.html) (also see `example_ccsr_v2020-3.csv` for an example of a correctly formatted CCSR file). 
-
+By default, the code will map ICD-10 diagnosis codes to CCSR version v2020-3. To change the CCSR version, please download the latest CCSR categorization file from the [CCSR website](https://www.hcup-us.ahrq.gov/toolssoftware/ccsr/dxccsr.jsp). Please make sure that the CCSR file has been formatted to match the description found in the [documentation](https://github.com/GEMINI-Medicine/gemini-ccsr/blob/master/docs/build/html/index.html) (also see `example_ccsr_v2020-3.csv` for an example of a correctly formatted CCSR file).
 
 ## Usage
 
@@ -33,6 +28,9 @@ ccsr = pd.read_csv(<ccsr_filepath>)
 
 direct, automatic, semiautomatic, failed = map_icd_to_ccsr(icd, ccsr)
 ```
+
+For a more detailed example, check `run_example.py` to map the list of ICD-10 diagnosis codes in `example_codes_to_map.csv`. Please see the documentation for a description of the four dataframes returned by the main function `map_icd_to_ccsr`. Codes that are returned in the semiautomatic/failed dataframes will need to be carefully reviewed, and may need to be mapped manually (see [here](https://medrxiv.org/cgi/content/short/2022.11.29.22282888v1) for more details). 
+
 
 ## Citation
 
