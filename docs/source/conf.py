@@ -18,11 +18,11 @@ sys.path.insert(0, os.path.abspath('../..'))
 # -- Project information -----------------------------------------------------
 
 project = 'gemini-ccsr'
-copyright = '2021, Daniel Tamming'
-author = 'Daniel Tamming'
+copyright = '2022, Anne Loffler & Daniel Tamming'
+author = 'Anne Loffler & Daniel Tamming'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.1'
+release = '1.0.0'
 
 
 # -- General configuration ---------------------------------------------------
