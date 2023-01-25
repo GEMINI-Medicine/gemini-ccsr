@@ -40,5 +40,5 @@ For a more detailed example, check `run_example.py` to map the list of ICD-10 di
 [MIT license](https://github.com/GEMINI-Medicine/gemini-ccsr/blob/master/LICENSE)
 
 ## Versions
-Version v1.0.1-beta - January 2023 (current version)
-Version v1.0.0-beta - November 2022
++ Version v1.0.1-beta - January 2023 (current version)
++ Version v1.0.0-beta - November 2022
