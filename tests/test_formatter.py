@@ -11,7 +11,6 @@ class TestFormatter(unittest.TestCase):
     ccsr = ccsr.drop(columns=['icd_description'])
 
     icd = pd.read_csv('example_codes_to_map.csv', dtype= 'str'); 
-    icd = icd['diagnosis_code'].tolist()
 
     def test_check_ccsr(self):
         assert_frame_equal(
