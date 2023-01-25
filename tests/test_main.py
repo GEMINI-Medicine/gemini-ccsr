@@ -16,15 +16,15 @@ class TestMain(unittest.TestCase):
         'tests/test_data/direct.csv', dtype=str).replace({np.nan: None})
     automatic = pd.read_csv(
         'tests/test_data/automatic.csv', dtype=str).replace({np.nan: None})    
-    automatic['Related Codes'] = automatic['Related Codes'].apply(lambda x: ast.literal_eval(x))
+    automatic['related_codes'] = automatic['related_codes'].apply(lambda x: ast.literal_eval(x))
 
     semiautomatic = pd.read_csv(
-        'tests/test_data/semiautomatic.csv', dtype={'Prct_fam_agree': float}).replace({np.nan: None})
+        'tests/test_data/semiautomatic.csv', dtype={'prct_fam_agree': float}).replace({np.nan: None})
     
     failed = pd.read_csv(
         'tests/test_data/failed.csv', dtype=str).replace({np.nan: None})
     icd = pd.concat(
-        [direct, automatic, semiautomatic, failed])['Queried ICD'].astype(str).unique()
+        [direct, automatic, semiautomatic, failed])['queried_icd'].astype(str).unique()
 
     def test_map_icd_to_ccsr_verbose(self):
         _ = main.map_icd_to_ccsr(self.icd, self.ccsr, verbose=True)

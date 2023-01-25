@@ -2,7 +2,6 @@ import unittest
 
 import pandas as pd
 from pandas.testing import assert_frame_equal
-import numpy as np
 
 from gemini_ccsr import formatter
 
@@ -11,7 +10,8 @@ class TestFormatter(unittest.TestCase):
     ccsr = pd.read_csv('tests/test_data/clean_ccsr_v2020-3.csv', dtype= 'str')
     ccsr = ccsr.drop(columns=['icd_description'])
 
-    icd = np.array(['A000', 'A001', 'A0101', 'A085'])
+    icd = pd.read_csv('example_codes_to_map.csv', dtype= 'str'); 
+    icd = icd['diagnosis_code'].tolist()
 
     def test_check_ccsr(self):
         assert_frame_equal(
@@ -32,23 +32,9 @@ class TestFormatter(unittest.TestCase):
         with self.assertRaises(ValueError):
             formatter.check_icd(pd.DataFrame(self.icd))
 
-    # def test_add_default_valid(self):
-        
-    #     res = formatter.add_default(
-    #         self.ccsr.drop(columns=['ccsr_def']).rename(columns={'icd': 'Queried ICD'}), self.ccsr)
-    #     res = res[self.ccsr.rename(columns={'icd': 'Queried ICD'}).columns]
-        
-    #     assert_frame_equal(res, self.ccsr.rename(columns={'icd': 'Queried ICD'}))
-
-    # def test_add_default_overwrite(self):
-    #     changed = self.ccsr.copy()
-    #     changed['ccsr_def'] = 'wrong categories'
-    #     res = formatter.add_default(changed.rename(columns={'icd': 'Queried ICD'}), self.ccsr)
-    #     assert_frame_equal(res, self.ccsr.rename(columns={'icd': 'Queried ICD'}))
-
     def test_add_default_empty(self):
         res = formatter.add_default(
-            pd.DataFrame(columns=self.ccsr.drop(columns=['ccsr_def']).rename(columns={'icd': 'Queried ICD'}).columns), self.ccsr)
+            pd.DataFrame(columns=self.ccsr.drop(columns=['ccsr_def']).rename(columns={'icd': 'queried_icd'}).columns), self.ccsr)
         self.assertEqual(len(res), 0)
 
     def test_add_descs_valid(self):

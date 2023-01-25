@@ -1,3 +1,5 @@
-Queried ICD,ccsr_def,ccsr_def_desc,ccsr_1,ccsr_1_desc,ccsr_2,ccsr_2_desc,ccsr_3,ccsr_3_desc,ccsr_4,ccsr_4_desc,ccsr_5,ccsr_5_desc,ccsr_6,ccsr_6_desc
-A020,DIG001,Intestinal infection,DIG001,Intestinal infection,INF003,Bacterial infections,,,,,,,,
-A021,INF002,Septicemia,INF002,Septicemia,INF003,Bacterial infections,,,,,,,,
+queried_icd,ccsr_def,ccsr_def_desc,ccsr_1,ccsr_1_desc,ccsr_2,ccsr_2_desc,ccsr_3,ccsr_3_desc,ccsr_4,ccsr_4_desc,ccsr_5,ccsr_5_desc,ccsr_6,ccsr_6_desc
+A001,DIG001,Intestinal infection,DIG001,Intestinal infection,INF003,Bacterial infections,,,,,,,,
+G3109,NVS011,Neurocognitive disorders,NVS011,Neurocognitive disorders,,,,,,,,,,
+H04209,EYE001,Cornea and external disease,EYE001,Cornea and external disease,EYE008,Oculofacial plastics and orbital conditions,,,,,,,,
+I132,GEN003,Chronic kidney disease,CIR008,Hypertension with complications and secondary hypertension,CIR019,Heart failure,GEN003,Chronic kidney disease,,,,,,

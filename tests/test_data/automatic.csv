@@ -1,6 +1,9 @@
-Queried ICD,Deciding Relationship,Related Codes,ccsr_def,ccsr_def_desc,ccsr_1,ccsr_1_desc,ccsr_2,ccsr_2_desc,ccsr_3,ccsr_3_desc,ccsr_4,ccsr_4_desc,ccsr_5,ccsr_5_desc,ccsr_6,ccsr_6_desc
-A010,Children,"['A0100', 'A0101', 'A0102', 'A0103', 'A0104', 'A0105', 'A0109']",INF003,Bacterial infections,INF003,Bacterial infections,,,,,,,,,,
-A022,Children,"['A0220', 'A0221', 'A0222', 'A0223', 'A0224', 'A0225', 'A0229']",INF003,Bacterial infections,INF003,Bacterial infections,,,,,,,,,,
-A1520,Cousins,"['A150', 'A154', 'A155', 'A156', 'A157', 'A158', 'A159']",INF001,Tuberculosis,INF001,Tuberculosis,,,,,,,,,,
-A1521,Cousins,"['A150', 'A154', 'A155', 'A156', 'A157', 'A158', 'A159']",INF001,Tuberculosis,INF001,Tuberculosis,,,,,,,,,,
-C44001,Parents,['C4400'],NEO028,Skin cancers - all other types,NEO028,Skin cancers - all other types,,,,,,,,,,
+queried_icd,deciding_relationship,related_codes,ccsr_def,ccsr_def_desc,ccsr_1,ccsr_1_desc,ccsr_2,ccsr_2_desc,ccsr_3,ccsr_3_desc,ccsr_4,ccsr_4_desc,ccsr_5,ccsr_5_desc,ccsr_6,ccsr_6_desc
+A081,Children,"['A0811', 'A0819']",DIG001,Intestinal infection,DIG001,Intestinal infection,INF008,Viral infection,,,,,,,,
+A1611,Extended Family,"['A150', 'A154', 'A155', 'A156', 'A157', 'A158', 'A159', 'A170', 'A171', 'A1781', 'A1782', 'A1783', 'A1789', 'A179', 'A1801', 'A1802', 'A1803', 'A1809', 'A1810', 'A1811', 'A1812', 'A1813', 'A1814', 'A1815', 'A1816', 'A1817', 'A1818', 'A182', 'A1831', 'A1832', 'A1839', 'A184', 'A1850', 'A1851', 'A1852', 'A1853', 'A1854', 'A1859', 'A186', 'A187', 'A1881', 'A1882', 'A1883', 'A1884', 'A1885', 'A1889', 'A190', 'A191', 'A192', 'A198', 'A199']",INF001,Tuberculosis,INF001,Tuberculosis,,,,,,,,,,
+E1030,Siblings,"['E1036', 'E1039']",END003,Diabetes mellitus with complication,END003,Diabetes mellitus with complication,END004,"Diabetes mellitus, Type 1",,,,,,,,
+E750,Children,"['E7500', 'E7501', 'E7502', 'E7509']",END016,Other specified and unspecified nutritional and metabolic disorders,END016,Other specified and unspecified nutritional and metabolic disorders,NVS006,Other specified hereditary and degenerative nervous system conditions,,,,,,,,
+F012,Cousins,"['F0150', 'F0151']",NVS011,Neurocognitive disorders,NVS011,Neurocognitive disorders,,,,,,,,,,
+R1958,Parents,['R195'],SYM006,Abdominal pain and other digestive/abdomen signs and symptoms,SYM006,Abdominal pain and other digestive/abdomen signs and symptoms,,,,,,,,,,
+T86881,Half-Siblings,['T86890'],INJ036,"Complication of transplanted organs or tissue, initial encounter",INJ036,"Complication of transplanted organs or tissue, initial encounter",,,,,,,,,,
+Z017,Cousins,"['Z0100', 'Z0101', 'Z01020', 'Z01021', 'Z0110', 'Z01110', 'Z01118', 'Z0112', 'Z0120', 'Z0121', 'Z0130', 'Z0131', 'Z01411', 'Z01419', 'Z0142', 'Z01810', 'Z01811', 'Z01812', 'Z01818', 'Z0182', 'Z0183', 'Z0184', 'Z0189']",FAC014,Medical examination/evaluation,FAC014,Medical examination/evaluation,,,,,,,,,,
