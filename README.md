@@ -37,7 +37,7 @@ For a more detailed example, check `run_example.py` to map the list of ICD-10 di
 [Malecki et al. (2022). Tools for categorization of diagnostic codes in hospital data: Operationalizing CCSR into a patient data repository.](https://medrxiv.org/cgi/content/short/2022.11.29.22282888v1)
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT license](https://github.com/GEMINI-Medicine/gemini-ccsr/blob/master/LICENSE)
 
 ## Version
 Version v1.0.0-beta - November 2022
