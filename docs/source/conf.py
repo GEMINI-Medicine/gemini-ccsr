@@ -22,7 +22,7 @@ copyright = '2022, Anne Loffler & Daniel Tamming'
 author = 'Anne Loffler & Daniel Tamming'
 
 # The full version, including alpha/beta/rc tags
-release = 'v1.0.0-beta'
+release = 'v1.0.1-beta'
 
 
 # -- General configuration ---------------------------------------------------
