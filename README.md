@@ -21,7 +21,7 @@ import pandas as pd
 from gemini_ccsr.main import map_icd_to_ccsr
 
 # ICD codes that should be mapped
-icd = ['A000', 'A001', 'A0101', 'A085']
+icd = ['A001', 'C767', 'E90', 'F012', 'G3109', 'N26', 'R1958', 'Z507']
 
 # Official CCSR categorization file
 ccsr = pd.read_csv(<path/to/ccsr.csv>)
