@@ -1,0 +1,1984 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Documentation for the Code &#8212; gemini-ccsr v1.0.1-beta documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/nature.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">gemini-ccsr v1.0.1-beta documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Documentation for the Code</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="documentation-for-the-code">
+<h1>Documentation for the Code<a class="headerlink" href="#documentation-for-the-code" title="Permalink to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="module-gemini_ccsr.main">
+<span id="gemini-ccsr-main"></span><h2>gemini-ccsr main<a class="headerlink" href="#module-gemini_ccsr.main" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="gemini_ccsr.main.map_icd_to_ccsr">
+<span class="sig-prename descclassname"><span class="pre">gemini_ccsr.main.</span></span><span class="sig-name descname"><span class="pre">map_icd_to_ccsr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_icd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">official_ccsr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemini_ccsr.main.map_icd_to_ccsr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tries to predict the CCSR mapping of each ICD-10 code.</p>
+<p>If a diagnosis code is in the <cite>official_ccsr</cite> dataframe, then its CCSR mapping
+is returned in the <cite>direct</cite> DataFrame.</p>
+<p>If the diagnosis code is not found in the <cite>official_ccsr</cite> dataframe, the
+algorithm first checks for closely related codes (<cite>Children</cite>, <cite>Siblings</cite>,
+or <cite>Parents</cite>) with known CCSR mappings. If no close relatives
+are found, the algorithm checks for distantly related codes (<cite>Half-siblings</cite>,
+<cite>Cousins</cite>, or <cite>Extended family</cite>).</p>
+<p>If no close/distant relatives are found, the diagnosis code is returned in
+the <cite>failed</cite> DataFrame and needs to be mapped manually.</p>
+<p>If a diagnosis code has close/distant relatives with known CCSR
+mappings but none of the CCSR categories are shared by <em>all</em> identified
+family members, then the code is returned in the <cite>semiautomatic</cite> DataFrame
+(along with the percentage of family members that share each candidate
+CCSR category).</p>
+<p>If a diagnosis code has close/distant relatives all family members have
+one or more categories in common, then that code is mapped to all shared
+categories and returned in the <cite>automatic</cite> DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>query_icd</strong> (<em>list</em>) – A list containing the ICD-10 codes that should be mapped.</p></li>
+<li><p><strong>ccsr</strong> (<em>pd.DataFrame</em>) – <p>DataFrame containing the official mappings published by CCSR.
+Must have the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD 10 code (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_def</p></td>
+<td><p>default CCSR category (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_def_desc</p></td>
+<td><p>default CCSR category description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_1_desc</p></td>
+<td><p>CCSR category 1 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2_desc</p></td>
+<td><p>CCSR category 2 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_3_desc</p></td>
+<td><p>CCSR category 3 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4_desc</p></td>
+<td><p>CCSR category 4 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_5_desc</p></td>
+<td><p>CCSR category 5 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6_desc</p></td>
+<td><p>CCSR category 6 description (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – If True, progress bars are printed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul>
+<li><p><strong>direct</strong> (<em>pd.DataFrame</em>) – Mapped CCSR categories of ICD-10 codes that could be mapped directly.
+Returns the corresponding rows from the offical CCSR file. Has the
+following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD-10 code (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_def</p></td>
+<td><p>default CCSR category (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_def_desc</p></td>
+<td><p>default CCSR category description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_1_desc</p></td>
+<td><p>CCSR category 1 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2_desc</p></td>
+<td><p>CCSR category 2 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_3_desc</p></td>
+<td><p>CCSR category 3 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4_desc</p></td>
+<td><p>CCSR category 4 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_5_desc</p></td>
+<td><p>CCSR category 5 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6_desc</p></td>
+<td><p>CCSR category 6 description (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><strong>automatic</strong> (<em>pd.DataFrame</em>) – Predicted CCSR categories for ICD-10 codes that could not be mapped directly,
+but whose CCSR categorization could be inferred based on related codes.
+Has the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>queried_icd</p></td>
+<td><p>ICD-10 codes that were mapped automatically (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>deciding_relationship</p></td>
+<td><p>The relationship that the related ICD-10 codes in
+<cite>official_ccsr</cite> have to the queried_icd (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>related_codes</p></td>
+<td><p>A list of all ICD-10 codes that were found in
+<cite>official_ccsr</cite> and have the <cite>deciding_relationship</cite>
+to <cite>queried_icd</cite> (as <cite>list</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_def</p></td>
+<td><p>default CCSR category (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_def_desc</p></td>
+<td><p>default CCSR category description
+(as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_1_desc</p></td>
+<td><p>CCSR category 1 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2_desc</p></td>
+<td><p>CCSR category 2 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_3_desc</p></td>
+<td><p>CCSR category 3 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4_desc</p></td>
+<td><p>CCSR category 4 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_5_desc</p></td>
+<td><p>CCSR category 5 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6_desc</p></td>
+<td><p>CCSR category 6 description (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><strong>semiautomatic</strong> (<em>pd.DataFrame</em>) – Predicted CCSR categories for ICD-10 codes that could not be mapped
+directly or automatically. These are diagnosis codes for which the
+algorithm identified related codes, but none of the CCSR categories
+are shared by all related codes (i.e., CCSR mapping could not be
+inferred automatically). Has one row for each [ICD-10 code, candidate
+CCSR] combination. Additionally provides the percentage of related
+codes that share each predicted CCSR category. Users need to review
+the output file to exclude any rows with incorrect predictions. As
+opposed to automatically mapped codes, semi-automatic codes are
+returned without default CCSR category. Users need to carefully inspect
+the smeiautomatic output and choose a default CCSR category after
+validating the predicted CCSR categories. Has the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>queried_icd</p></td>
+<td><p>ICD-10 codes that were mapped semi-automatically
+(as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>relationship</p></td>
+<td><p>The type of relationship (<cite>Close</cite>/<cite>Distant</cite>) that the
+related ICD-10 codes in <cite>official_ccsr</cite> have to the
+<cite>queried_icd</cite> (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>pred_ccsr</p></td>
+<td><p>Predicted CCSR category (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>pred_ccsr_desc</p></td>
+<td><p>Predicted CCSR category description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>prct_fam_agree</p></td>
+<td><p>Percentage of related diagnosis codes in the official
+CCSR file that share the predicted CCSR category
+(as <cite>num</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><strong>failed</strong> (<em>pd.DataFrame</em>) – The items of query_icd corresponding to ICD-10 codes that do not have
+any closely or distantly related codes in the official CCSR file. Only
+contains a single column for the failed ICD-10 codes.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>queried_icd</p></td>
+<td><p>Failed ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-gemini_ccsr.relation_finder">
+<span id="gemini-ccsr-relation-finder"></span><h2>gemini-ccsr relation_finder<a class="headerlink" href="#module-gemini_ccsr.relation_finder" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="gemini_ccsr.relation_finder.get_children">
+<span class="sig-prename descclassname"><span class="pre">gemini_ccsr.relation_finder.</span></span><span class="sig-name descname"><span class="pre">get_children</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">icd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ccsr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemini_ccsr.relation_finder.get_children" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds any Children codes of a given ICD-10 code and returns their
+CCSR categories from the official CCSR mapping file. Children codes are
+defined as ICD-10 codes in the official CCSR mapping file that contain the
+queried ICD-10 code, but have one or more additional characters.
+For example, “A4181” is a Child of “A418”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>icd</strong> (<em>str</em>) – ICD-10 code that could not be mapped directly.</p></li>
+<li><p><strong>ccsr</strong> (<em>pd.DataFrame</em>) – <p>DataFrame containing the official mappings published by CCSR.
+Must have the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p><strong>related</strong> – All Children codes of the unmapped ICD-10 codes and the CCSR categories of
+each identified Child. Each row corresponds to one Child code.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>queried_icd</p></td>
+<td><p>The queried ICD-10 codes given in <cite>icd</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p>relationship</p></td>
+<td><p>Relationship to <cite>queried_icd</cite> (i.e.,
+“Children”, as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>Children ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemini_ccsr.relation_finder.get_closely_related">
+<span class="sig-prename descclassname"><span class="pre">gemini_ccsr.relation_finder.</span></span><span class="sig-name descname"><span class="pre">get_closely_related</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unmapped</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ccsr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemini_ccsr.relation_finder.get_closely_related" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds any closely related codes of a given ICD-10 code and returns their
+CCSR categories from the official CCSR mapping file.</p>
+<p>Close relatives are defined as <cite>Children</cite>, <cite>Siblings</cite>, or <cite>Parents</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>unmapped</strong> (<em>str</em>) – ICD-10 code that could not be mapped directly.</p></li>
+<li><p><strong>ccsr</strong> (<em>pd.DataFrame</em>) – <p>DataFrame containing the official mappings published by CCSR.
+Must have the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_def</p></td>
+<td><p>default CCSR category (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_def_desc</p></td>
+<td><p>default CCSR category description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_1_desc</p></td>
+<td><p>CCSR category 1 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2_desc</p></td>
+<td><p>CCSR category 2 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_3_desc</p></td>
+<td><p>CCSR category 3 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4_desc</p></td>
+<td><p>CCSR category 4 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_5_desc</p></td>
+<td><p>CCSR category 5 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6_desc</p></td>
+<td><p>CCSR category 6 description (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – If True, progress bars are printed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p><strong>related_df</strong> – All Children, Sibling, and Parent codes of the unmapped
+ICD-10 codes. Each row contains a unique combination of queried_icd
+and any closly related ICD-10 code in the official CCSR file.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>queried_icd</p></td>
+<td><p>ICD-10 codes given in the <cite>unmapped</cite> input
+(as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>relationship</p></td>
+<td><p>The relationship that the related ICD-10 codes in
+the official CCSR file have to <cite>queried_icd</cite> (i.e.,
+“Close”, as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>Related ICD-10 code identified in official CCSR
+file (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemini_ccsr.relation_finder.get_cousins">
+<span class="sig-prename descclassname"><span class="pre">gemini_ccsr.relation_finder.</span></span><span class="sig-name descname"><span class="pre">get_cousins</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">icd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ccsr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemini_ccsr.relation_finder.get_cousins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds any Cousin codes of a given ICD-10 code and returns their
+CCSR categories from the official CCSR mapping file. Cousins are defined
+as any ICD-10 codes that share the same first three characters, regardless
+of the remaining characters. For example, “F010” and “F0151” are Cousin
+codes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>icd</strong> (<em>str</em>) – ICD-10 code that could not be mapped directly.</p></li>
+<li><p><strong>ccsr</strong> (<em>pd.DataFrame</em>) – <p>DataFrame containing the official mappings published by CCSR.
+Must have the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p><strong>related</strong> – All Cousin codes of the unmapped ICD-10 codes and the CCSR categories of
+each identified Cousin. Each row corresponds to one Cousin code.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>queried_icd</p></td>
+<td><p>The queried ICD-10 codes given in <cite>icd</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p>relationship</p></td>
+<td><p>Relationship to <cite>queried_icd</cite> (i.e.,
+“Cousins”, as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>Cousin ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemini_ccsr.relation_finder.get_direct_unmapped">
+<span class="sig-prename descclassname"><span class="pre">gemini_ccsr.relation_finder.</span></span><span class="sig-name descname"><span class="pre">get_direct_unmapped</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">icd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ccsr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemini_ccsr.relation_finder.get_direct_unmapped" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds ICD-10 codes that match a diagnosis code in the official CCSR file
+and can be mapped directly to the corresponding CCSR categories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>icd</strong> (<em>pd.DataFrame</em>) – <p>A DataFrame with only one column:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+<li><p><strong>ccsr</strong> (<em>pd.DataFrame</em>) – <p>DataFrame containing the official mappings published by CCSR.
+Must have the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_def</p></td>
+<td><p>default CCSR category (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_def_desc</p></td>
+<td><p>default CCSR category description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_1_desc</p></td>
+<td><p>CCSR category 1 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2_desc</p></td>
+<td><p>CCSR category 2 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_3_desc</p></td>
+<td><p>CCSR category 3 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4_desc</p></td>
+<td><p>CCSR category 4 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_5_desc</p></td>
+<td><p>CCSR category 5 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6_desc</p></td>
+<td><p>CCSR category 6 description (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul>
+<li><p><strong>direct</strong> (<em>pd.DataFrame</em>) – The rows of <cite>ccsr</cite> for ICD-10 codes in <cite>icd</cite> that matched diagnosis
+codes in the official CCSR mapping file.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_def</p></td>
+<td><p>default CCSR category (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_def_desc</p></td>
+<td><p>default CCSR category description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_1_desc</p></td>
+<td><p>CCSR category 1 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2_desc</p></td>
+<td><p>CCSR category 2 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_3_desc</p></td>
+<td><p>CCSR category 3 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4_desc</p></td>
+<td><p>CCSR category 4 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_5_desc</p></td>
+<td><p>CCSR category 5 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6_desc</p></td>
+<td><p>CCSR category 6 description (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><strong>unmapped</strong> (<em>pd.DataFrame</em>) – The rows of <cite>icd</cite> whose entries do not appear in <cite>ccsr</cite>.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD-10 codes that could not be mapped directly
+(as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemini_ccsr.relation_finder.get_distantly_related">
+<span class="sig-prename descclassname"><span class="pre">gemini_ccsr.relation_finder.</span></span><span class="sig-name descname"><span class="pre">get_distantly_related</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unmapped</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ccsr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemini_ccsr.relation_finder.get_distantly_related" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds any distantly related codes of a given ICD-10 code and returns their
+CCSR categories from the official CCSR mapping file.</p>
+<p>Distant relatives are defined as <cite>Half-Siblings</cite>, <cite>Cousins</cite>, or <cite>Extended Family</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>unmapped</strong> (<em>str</em>) – ICD-10 code that could not be mapped directly.</p></li>
+<li><p><strong>ccsr</strong> (<em>pd.DataFrame</em>) – <p>DataFrame containing the official mappings published by CCSR.
+Must have the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD-10 cods (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_def</p></td>
+<td><p>default CCSR category (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_def_desc</p></td>
+<td><p>default CCSR category description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_1_desc</p></td>
+<td><p>CCSR category 1 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2_desc</p></td>
+<td><p>CCSR category 2 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_3_desc</p></td>
+<td><p>CCSR category 3 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4_desc</p></td>
+<td><p>CCSR category 4 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_5_desc</p></td>
+<td><p>CCSR category 5 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6_desc</p></td>
+<td><p>CCSR category 6 description (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – If True, progress bars are printed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p><strong>related_df</strong> – All Half-Siblings, Cousins, and Extended Family member codes of the
+unmapped ICD-10 codes. Each row contains a unique combination of
+<cite>queried_icd</cite> and any distantly related ICD-10 codes in the official
+CCSR file.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>queried_icd</p></td>
+<td><p>ICD-10 codes given in the <cite>unmapped</cite> input
+(as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>relationship</p></td>
+<td><p>The relationship that the related ICD-10 codes in
+the official CCSR file have to <cite>queried_icd</cite> (i.e.,
+“Distant”, as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>Related ICD-10 codes identified in official CCSR
+file (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemini_ccsr.relation_finder.get_extfam">
+<span class="sig-prename descclassname"><span class="pre">gemini_ccsr.relation_finder.</span></span><span class="sig-name descname"><span class="pre">get_extfam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">icd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ccsr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemini_ccsr.relation_finder.get_extfam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds any Extended Family codes of a given ICD-10 code and returns their
+CCSR categories from the official CCSR mapping file. Extended Family
+members are defined as any diagnosis codes that share the first two
+characters, regardless of any remaining characters. For example, “A970”
+and “A91” are Extended Family codes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>icd</strong> (<em>str</em>) – ICD-10 code that could not be mapped directly.</p></li>
+<li><p><strong>ccsr</strong> (<em>pd.DataFrame</em>) – <p>DataFrame containing the official mappings published by CCSR.
+Must have the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p><strong>related</strong> – All Extended Family member codes of the unmapped ICD-10 codes and the
+CCSR categories of each identified Extended Family member. Each row
+corresponds to one Extended Family member.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>queried_icd</p></td>
+<td><p>The queried ICD-10 codes given in <cite>icd</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p>relationship</p></td>
+<td><p>Relationship to <cite>queried_icd</cite> (i.e.,
+“Extended Family”, as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>Extended Family member ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemini_ccsr.relation_finder.get_halfsibs">
+<span class="sig-prename descclassname"><span class="pre">gemini_ccsr.relation_finder.</span></span><span class="sig-name descname"><span class="pre">get_halfsibs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">icd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ccsr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemini_ccsr.relation_finder.get_halfsibs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds any Half-Sibling codes of a given ICD-10 code and returns their
+CCSR categories from the official CCSR mapping file. Half-Siblings are
+defined as codes with the same number of characters that can differ
+on their last two digits as long as 1) the first three characters are
+identical and 2) the last two digits only differ by a distance of +/- 9.
+For example, “E1165” is a Half-Sibling of “E1170”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>icd</strong> (<em>str</em>) – ICD-10 code that could not be mapped directly.</p></li>
+<li><p><strong>ccsr</strong> (<em>pd.DataFrame</em>) – <p>DataFrame containing the official mappings published by CCSR.
+Must have the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p><strong>related</strong> – All Half-Sibling codes of the unmapped ICD-10 codes and the CCSR
+categories of each identified Half-Sibling. Each row corresponds to one
+Half-Sibling code.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>queried_icd</p></td>
+<td><p>The queried ICD-10 codes given in <cite>icd</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p>relationship</p></td>
+<td><p>Relationship to <cite>queried_icd</cite> (i.e., “Half-Siblings”,
+as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>Half-Sibling ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemini_ccsr.relation_finder.get_parents">
+<span class="sig-prename descclassname"><span class="pre">gemini_ccsr.relation_finder.</span></span><span class="sig-name descname"><span class="pre">get_parents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">icd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ccsr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemini_ccsr.relation_finder.get_parents" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds any Parent codes of a given ICD-10 code and returns their
+CCSR categories from the official CCSR mapping file. Parent codes are
+defined as ICD-10 codes in the official CCSR mapping file that are
+contained within the queried ICD-10 code, but have one less character.
+For example, “C880” is a Parent code of “C8808”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>icd</strong> (<em>str</em>) – ICD-10 code that could not be mapped directly.</p></li>
+<li><p><strong>ccsr</strong> (<em>pd.DataFrame</em>) – <p>DataFrame containing the official mappings published by CCSR.
+Must have the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p><strong>related</strong> – All Parent codes of the unmapped ICD-10 codes and the CCSR categories of
+each identified Parent. Each row corresponds to one Parent code.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>queried_icd</p></td>
+<td><p>The queried ICD-10 codes given in <cite>icd</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p>relationship</p></td>
+<td><p>Relationship to <cite>queried_icd</cite> (i.e.,
+“Parents”, as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>Parent ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemini_ccsr.relation_finder.get_predicted">
+<span class="sig-prename descclassname"><span class="pre">gemini_ccsr.relation_finder.</span></span><span class="sig-name descname"><span class="pre">get_predicted</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">unmapped</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ccsr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemini_ccsr.relation_finder.get_predicted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tries to predict the CCSR mapping of each ICD-10 code that could not
+be mapped directly.</p>
+<p>For any unmapped codes, the algorithm first checks for closely related
+codes (<cite>Children</cite>, <cite>Siblings</cite>, or <cite>Parents</cite>) with known CCSR mappings.
+If no close relatives are found, the algorithm checks for distantly related
+codes (<cite>Half-siblings</cite>, <cite>Cousins</cite>, or <cite>Extended family</cite>).</p>
+<p>If no close/distant relatives are found, the diagnosis code is returned in
+the <cite>failed</cite> DataFrame and needs to be mapped manually.</p>
+<p>If a diagnosis code has close/distant relatives with known CCSR
+mappings but none of the CCSR categories are shared by <em>all</em> identified
+family members, then the code is returned in the <cite>semiautomatic</cite> DataFrame
+(along with information about what percentage of family members share each
+candidate CCSR category).</p>
+<p>If a diagnosis code has close/distant relatives all family members have
+one or more categories in common, then that code is mapped to all shared
+categories and returned in the <cite>automatic</cite> DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>unmapped</strong> (<em>pd.DataFrame</em>) – <p>A DataFrame with only one column containing any ICD-10 codes that could
+not be mapped directly:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+<li><p><strong>ccsr</strong> (<em>pd.DataFrame</em>) – <p>DataFrame containing the official mappings published by CCSR.
+Must have the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_def</p></td>
+<td><p>default CCSR category (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_def_desc</p></td>
+<td><p>default CCSR category description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_1_desc</p></td>
+<td><p>CCSR category 1 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2_desc</p></td>
+<td><p>CCSR category 2 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_3_desc</p></td>
+<td><p>CCSR category 3 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4_desc</p></td>
+<td><p>CCSR category 4 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_5_desc</p></td>
+<td><p>CCSR category 5 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6_desc</p></td>
+<td><p>CCSR category 6 description (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – If True, progress bars are printed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul>
+<li><p><strong>automatic</strong> (<em>pd.DataFrame</em>) – Predicted CCSR categories for ICD-10 codes that could not be mapped directly,
+but whose CCSR categorization could be inferred based on related codes.
+Has the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>queried_icd</p></td>
+<td><p>ICD-10 codes that were mapped automatically
+(as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>deciding_relationship</p></td>
+<td><p>The relationship that the related ICD-10 codes
+in <cite>official_ccsr</cite> have to the <cite>queried_icd</cite>
+(as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>related_codes</p></td>
+<td><p>A list of all ICD-10 codes that were found in
+<cite>official_ccsr</cite> and have the
+<cite>deciding_relationship</cite> to <cite>queried_icd</cite>
+(as <cite>list</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_def</p></td>
+<td><p>default CCSR category (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_def_desc</p></td>
+<td><p>default CCSR category description
+(as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_1_desc</p></td>
+<td><p>CCSR category 1 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2_desc</p></td>
+<td><p>CCSR category 2 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_3_desc</p></td>
+<td><p>CCSR category 3 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4_desc</p></td>
+<td><p>CCSR category 4 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_5_desc</p></td>
+<td><p>CCSR category 5 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6_desc</p></td>
+<td><p>CCSR category 6 description (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><strong>semiautomatic</strong> (<em>pd.DataFrame</em>) – Predicted CCSR categories for ICD-10 codes that could not be mapped
+directly or automatically. These are diagnosis codes for which the
+algorithm identified related codes, but none of the CCSR categories
+are shared by all related codes (i.e., CCSR mapping could not be
+inferred automatically). Has one row for each [ICD-10 code, candidate
+CCSR] combination. Additionally provides the percentage of related
+codes that share each predicted CCSR category. Users need to review
+the output file to exclude any rows with incorrect predictions.
+Has the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>queried_icd</p></td>
+<td><p>ICD-10 codes that were mapped semi-automatically.
+(as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>relationship</p></td>
+<td><p>The relationship that the queried ICD-10 code
+has to related codes in <cite>official_ccsr</cite>. Either “Close”
+or “Distant” (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>pred_ccsr</p></td>
+<td><p>Predicted CCSR category (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>pred_ccsr_desc</p></td>
+<td><p>Predicted CCSR category description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>prct_fam_agree</p></td>
+<td><p>Percentage of related diagnosis codes in the official
+CCSR file that share the predicted CCSR category
+(as <cite>num</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><strong>failed</strong> (<em>pd.DataFrame</em>) – The rows of <cite>query_icd</cite> corresponding to ICD-10 codes that do not have
+any closely or distantly related codes in the official CCSR file.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemini_ccsr.relation_finder.get_sibs">
+<span class="sig-prename descclassname"><span class="pre">gemini_ccsr.relation_finder.</span></span><span class="sig-name descname"><span class="pre">get_sibs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">icd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ccsr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemini_ccsr.relation_finder.get_sibs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds any Sibling codes of a given ICD-10 code and returns their
+CCSR categories from the official CCSR mapping file. Siblings are defined
+as any ICD-10 codes that have the same number of characters but differ in
+their last digit. For example, “B485” and “B488” are Sibling codes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>icd</strong> (<em>str</em>) – ICD-10 code that could not be mapped directly.</p></li>
+<li><p><strong>ccsr</strong> (<em>pd.DataFrame</em>) – <p>DataFrame containing the official mappings published by CCSR.
+Must have the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p><strong>related</strong> – All Sibling codes of the unmapped ICD-10 codes and the CCSR categories of
+each identified Sibling. Each row corresponds to one Sibling code.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>queried_icd</p></td>
+<td><p>The queried ICD-10 codes given in <cite>icd</cite>.</p></td>
+</tr>
+<tr class="row-even"><td><p>relationship</p></td>
+<td><p>Relationship to <cite>queried_icd</cite> (i.e.,
+“Siblings”, as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>Sibling ICD-10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-gemini_ccsr.formatter">
+<span id="gemini-ccsr-formatter"></span><h2>gemini-ccsr formatter<a class="headerlink" href="#module-gemini_ccsr.formatter" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="gemini_ccsr.formatter.add_default">
+<span class="sig-prename descclassname"><span class="pre">gemini_ccsr.formatter.</span></span><span class="sig-name descname"><span class="pre">add_default</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_ccsr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">official_ccsr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemini_ccsr.formatter.add_default" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds default CCSR categories to a DataFrame with automatically
+mapped CCSR categories. Note: Semi-automatically/failed diagnosis codes
+are returned without default CCSR category as those DataFrames require
+additional validation and/or manual mapping. The default CCSR category for
+those codes should be added after validation has been completed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_ccsr</strong> (<em>pd.DataFrame</em>) – <p>DataFrame containing the output of the automatically mapped ICD-10
+codes. Must have the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>queried_icd</p></td>
+<td><p>ICD-10 codes that were mapped automatically
+(as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>deciding_relationship</p></td>
+<td><p>The relationship that the related ICD-10 codes
+in official_ccsr have to the queried_icd
+(as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>related_codes</p></td>
+<td><p>A list of all ICD-10 codes that were found in
+official_ccsr and have the
+<cite>deciding_relationship</cite> to queried_icd (as
+<cite>list</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+<li><p><strong>official_ccsr</strong> (<em>pd.DataFrame</em>) – <p>DataFrame containing the official mappings published by CCSR.
+Must have the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD 10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_def</p></td>
+<td><p>default CCSR category (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_def_desc</p></td>
+<td><p>default CCSR category description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_1_desc</p></td>
+<td><p>CCSR category 1 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2_desc</p></td>
+<td><p>CCSR category 2 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_3_desc</p></td>
+<td><p>CCSR category 3 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4_desc</p></td>
+<td><p>CCSR category 4 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_5_desc</p></td>
+<td><p>CCSR category 5 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6_desc</p></td>
+<td><p>CCSR category 6 description (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ccsr</strong> – The <cite>output_ccsr</cite> input DataFrame with a CCSR default category
+column added.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemini_ccsr.formatter.add_descs">
+<span class="sig-prename descclassname"><span class="pre">gemini_ccsr.formatter.</span></span><span class="sig-name descname"><span class="pre">add_descs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_ccsr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">official_ccsr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">automatic_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemini_ccsr.formatter.add_descs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds CCSR descriptions to the output DataFrame with mapped CCSR
+categories. This is only relevant for the automatic and semi-automatic
+DataFrames. Since the automatic vs. semi-automatic output DataFrames are
+formatted slightly differently, the <cite>automatic_format</cite> flag indicates which
+format should be assumed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_ccsr</strong> (<em>pd.DataFrame</em>) – <p>DataFrame containing the output of the semi-/automatically mapped
+ICD-10 codes. The structure and content of this DataFrama depends on
+whether <cite>output_ccsr</cite> corresponds to automatically or semi-automatically
+mapped codes.
+For automatic codes, <cite>output_ccsr</cite> contains any automatically mapped
+ICD-10 codes, including their mapped CCSR 1-6 categories in separate
+columns as well as an additional column coding the CCSR default
+category:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>queried_icd</p></td>
+<td><p>ICD-10 codes that were mapped automatically
+(as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>deciding_relationship</p></td>
+<td><p>The relationship that the related ICD-10 codes
+in official_ccsr have to the queried_icd
+(as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>related_codes</p></td>
+<td><p>A list of all ICD-10 codes that were found in
+official_ccsr and have the
+<cite>deciding_relationship</cite> to queried_icd
+(as <cite>list</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_def</p></td>
+<td><p>For automatic codes only: CCSR default category
+assigned by the add_default function (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+<p>For semi-automatic codes, <cite>output_ccsr</cite> contains any semi-automatically
+mapped ICD-10 codes, where each row of ccsr_1 corresponds to a
+candidate CCSR category. In this case, no CCSR default category exists.
+Must have the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>queried_icd</p></td>
+<td><p>ICD-10 codes that were mapped semi-automatically
+(as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>relationship</p></td>
+<td><p>The type of relationship (<cite>Close</cite>/<cite>Distant</cite>)
+that the related ICD-10 codes in official_ccsr
+have to the queried_icd (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_1</p></td>
+<td><p>Predicted CCSR categories in separate rows
+(as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>prct_fam_agree</p></td>
+<td><p>Percentage of related diagnosis codes in the
+official CCSR file that share the predicted CCSR
+category (as <cite>num</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+<li><p><strong>official_ccsr</strong> (<em>pd.DataFrame</em>) – <p>DataFrame containing the official mappings published by CCSR.
+Must have the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD 10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_def</p></td>
+<td><p>default CCSR category (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_def_desc</p></td>
+<td><p>default CCSR category description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_1_desc</p></td>
+<td><p>CCSR category 1 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2_desc</p></td>
+<td><p>CCSR category 2 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_3_desc</p></td>
+<td><p>CCSR category 3 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4_desc</p></td>
+<td><p>CCSR category 4 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_5_desc</p></td>
+<td><p>CCSR category 5 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6_desc</p></td>
+<td><p>CCSR category 6 description (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p></li>
+<li><p><strong>automatic_format</strong> (<em>bool</em>) – Flag indicating whether <cite>output_ccsr</cite> DataFrame corresponds to
+automatically mapped codes (True) or semi-automatically mapped codes
+(False).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>output_ccsr</strong> – The <cite>output_ccsr</cite> input dataframe with description columns added. Format
+will slightly differ between automatic vs. semi-automatic output
+DataFrames.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemini_ccsr.formatter.check_ccsr">
+<span class="sig-prename descclassname"><span class="pre">gemini_ccsr.formatter.</span></span><span class="sig-name descname"><span class="pre">check_ccsr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ccsr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemini_ccsr.formatter.check_ccsr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks that the ccsr DataFrame containing the official CCSR mapping
+is formatted correctly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ccsr</strong> (<em>pd.DataFrame</em>) – <p>DataFrame containing the official mappings published by CCSR.
+Must have the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD 10 code (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_def</p></td>
+<td><p>default CCSR category (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_def_desc</p></td>
+<td><p>default CCSR category description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_1_desc</p></td>
+<td><p>CCSR category 1 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2_desc</p></td>
+<td><p>CCSR category 2 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_3_desc</p></td>
+<td><p>CCSR category 3 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4_desc</p></td>
+<td><p>CCSR category 4 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_5_desc</p></td>
+<td><p>CCSR category 5 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6_desc</p></td>
+<td><p>CCSR category 6 description (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ccsr</strong> – The input DataFrame with <cite>only</cite> the mandatory columns.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemini_ccsr.formatter.check_icd">
+<span class="sig-prename descclassname"><span class="pre">gemini_ccsr.formatter.</span></span><span class="sig-name descname"><span class="pre">check_icd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query_icd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemini_ccsr.formatter.check_icd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks that query_icd is formatted correctly.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>query_icd</strong> (<em>array_like</em>) – <p>A one-dimensional array_like object containing the ICD-10 codes
+that should be mapped.</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>query_icd</p></td>
+<td><p>ICD-10 codes to be mapped (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p><strong>query_icd</strong> – A DataFrame whose only column is the input query_icd list
+(as <cite>str</cite>)</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>query_icd</p></td>
+<td><p>Correctly formatted ICD-10 codes to be mapped
+(as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemini_ccsr.formatter.get_default_map">
+<span class="sig-prename descclassname"><span class="pre">gemini_ccsr.formatter.</span></span><span class="sig-name descname"><span class="pre">get_default_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">official_ccsr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemini_ccsr.formatter.get_default_map" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a mapping from CCSR categories to their default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>official_ccsr</strong> (<em>pd.DataFrame</em>) – <p>DataFrame containing the official mappings published by CCSR.
+Must have the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD-10 code (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_def</p></td>
+<td><p>default CCSR category (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_def_desc</p></td>
+<td><p>default CCSR category description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_1_desc</p></td>
+<td><p>CCSR category 1 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2_desc</p></td>
+<td><p>CCSR category 2 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_3_desc</p></td>
+<td><p>CCSR category 3 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4_desc</p></td>
+<td><p>CCSR category 4 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_5_desc</p></td>
+<td><p>CCSR category 5 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6_desc</p></td>
+<td><p>CCSR category 6 description (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>default_map</strong> – a dictionary mapping from a group of CCSR categories
+(alphabetically sorted) to their default category.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict of tuple : str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gemini_ccsr.formatter.get_desc_df">
+<span class="sig-prename descclassname"><span class="pre">gemini_ccsr.formatter.</span></span><span class="sig-name descname"><span class="pre">get_desc_df</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">official_ccsr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#gemini_ccsr.formatter.get_desc_df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a dataframe map from a CCSR category to its description.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>official_ccsr</strong> (<em>pd.DataFrame</em>) – <p>DataFrame containing the official mappings published by CCSR.
+Must have the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>icd</p></td>
+<td><p>ICD 10 codes (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_def</p></td>
+<td><p>default CCSR category (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_def_desc</p></td>
+<td><p>default CCSR category description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_1</p></td>
+<td><p>CCSR category 1 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_1_desc</p></td>
+<td><p>CCSR category 1 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_2</p></td>
+<td><p>CCSR category 2 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_2_desc</p></td>
+<td><p>CCSR category 2 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_3</p></td>
+<td><p>CCSR category 3 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_3_desc</p></td>
+<td><p>CCSR category 3 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_4</p></td>
+<td><p>CCSR category 4 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_4_desc</p></td>
+<td><p>CCSR category 4 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_5</p></td>
+<td><p>CCSR category 5 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_5_desc</p></td>
+<td><p>CCSR category 5 description (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_6</p></td>
+<td><p>CCSR category 6 (as <cite>str</cite>)</p></td>
+</tr>
+<tr class="row-odd"><td><p>ccsr_6_desc</p></td>
+<td><p>CCSR category 6 description (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><p><strong>ccsr_desc</strong> – DataFrame mapping from CCSR categories to their descriptions.
+Has the following columns:</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p>ccsr</p></td>
+<td><p>CCSR category (as <a href="#id1"><span class="problematic" id="id2">`</span></a>str)</p></td>
+</tr>
+<tr class="row-even"><td><p>ccsr_desc</p></td>
+<td><p>CCSR category desciption (as <cite>str</cite>)</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>pd.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="#">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Documentation for the Code</a><ul>
+<li><a class="reference internal" href="#module-gemini_ccsr.main">gemini-ccsr main</a><ul>
+<li><a class="reference internal" href="#gemini_ccsr.main.map_icd_to_ccsr"><code class="docutils literal notranslate"><span class="pre">map_icd_to_ccsr()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-gemini_ccsr.relation_finder">gemini-ccsr relation_finder</a><ul>
+<li><a class="reference internal" href="#gemini_ccsr.relation_finder.get_children"><code class="docutils literal notranslate"><span class="pre">get_children()</span></code></a></li>
+<li><a class="reference internal" href="#gemini_ccsr.relation_finder.get_closely_related"><code class="docutils literal notranslate"><span class="pre">get_closely_related()</span></code></a></li>
+<li><a class="reference internal" href="#gemini_ccsr.relation_finder.get_cousins"><code class="docutils literal notranslate"><span class="pre">get_cousins()</span></code></a></li>
+<li><a class="reference internal" href="#gemini_ccsr.relation_finder.get_direct_unmapped"><code class="docutils literal notranslate"><span class="pre">get_direct_unmapped()</span></code></a></li>
+<li><a class="reference internal" href="#gemini_ccsr.relation_finder.get_distantly_related"><code class="docutils literal notranslate"><span class="pre">get_distantly_related()</span></code></a></li>
+<li><a class="reference internal" href="#gemini_ccsr.relation_finder.get_extfam"><code class="docutils literal notranslate"><span class="pre">get_extfam()</span></code></a></li>
+<li><a class="reference internal" href="#gemini_ccsr.relation_finder.get_halfsibs"><code class="docutils literal notranslate"><span class="pre">get_halfsibs()</span></code></a></li>
+<li><a class="reference internal" href="#gemini_ccsr.relation_finder.get_parents"><code class="docutils literal notranslate"><span class="pre">get_parents()</span></code></a></li>
+<li><a class="reference internal" href="#gemini_ccsr.relation_finder.get_predicted"><code class="docutils literal notranslate"><span class="pre">get_predicted()</span></code></a></li>
+<li><a class="reference internal" href="#gemini_ccsr.relation_finder.get_sibs"><code class="docutils literal notranslate"><span class="pre">get_sibs()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-gemini_ccsr.formatter">gemini-ccsr formatter</a><ul>
+<li><a class="reference internal" href="#gemini_ccsr.formatter.add_default"><code class="docutils literal notranslate"><span class="pre">add_default()</span></code></a></li>
+<li><a class="reference internal" href="#gemini_ccsr.formatter.add_descs"><code class="docutils literal notranslate"><span class="pre">add_descs()</span></code></a></li>
+<li><a class="reference internal" href="#gemini_ccsr.formatter.check_ccsr"><code class="docutils literal notranslate"><span class="pre">check_ccsr()</span></code></a></li>
+<li><a class="reference internal" href="#gemini_ccsr.formatter.check_icd"><code class="docutils literal notranslate"><span class="pre">check_icd()</span></code></a></li>
+<li><a class="reference internal" href="#gemini_ccsr.formatter.get_default_map"><code class="docutils literal notranslate"><span class="pre">get_default_map()</span></code></a></li>
+<li><a class="reference internal" href="#gemini_ccsr.formatter.get_desc_df"><code class="docutils literal notranslate"><span class="pre">get_desc_df()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">gemini-ccsr v1.0.1-beta documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Documentation for the Code</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Anne Loffler &amp; Daniel Tamming.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+    </div>
+  </body>
+</html>

@@ -30,9 +30,8 @@ def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
 
     Parameters
     ----------
-    query_icd : array_like
-        A one-dimensional array_like object containing the ICD-10 codes
-        that should be mapped.
+    query_icd : list
+        A list containing the ICD-10 codes that should be mapped.
     ccsr : pd.DataFrame
         DataFrame containing the official mappings published by CCSR.
         Must have the following columns:
@@ -141,7 +140,7 @@ def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
         ===============  =====================================================
 
     failed : pd.DataFrame
-        The rows of query_icd corresponding to ICD-10 codes that do not have 
+        The items of query_icd corresponding to ICD-10 codes that do not have 
         any closely or distantly related codes in the official CCSR file. Only
         contains a single column for the failed ICD-10 codes.
         

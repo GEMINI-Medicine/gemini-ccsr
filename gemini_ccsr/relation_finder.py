@@ -422,12 +422,8 @@ def get_closely_related(unmapped, ccsr, verbose):
 
     Parameters
     ----------
-    unmapped : pd.DataFrame
-        A DataFrame with only one columns:
-
-        ========  ==========================================================
-        icd       ICD-10 codes that could not be mapped directly (as `str`)
-        ========  ==========================================================
+    unmapped : str 
+        ICD-10 code that could not be mapped directly.
 
     ccsr : pd.DataFrame
         DataFrame containing the official mappings published by CCSR.
@@ -501,8 +497,9 @@ def get_children(icd, ccsr):
 
     Parameters
     ----------
-    icd : Series
-        A Series with ICD-10 codes as its only element.
+    icd : str 
+        ICD-10 code that could not be mapped directly.
+        
     ccsr : pd.DataFrame
         DataFrame containing the official mappings published by CCSR.
         Must have the following columns:
@@ -558,8 +555,8 @@ def get_sibs(icd, ccsr):
 
     Parameters
     ----------
-    icd : Series
-        A Series with ICD-10 codes as its only element.
+    icd : str 
+        ICD-10 code that could not be mapped directly.
     ccsr : pd.DataFrame
         DataFrame containing the official mappings published by CCSR.
         Must have the following columns:
@@ -612,8 +609,8 @@ def get_parents(icd, ccsr):
 
     Parameters
     ----------
-    icd : Series
-        A Series with ICD-10 codes as its only element.
+    icd : str 
+        ICD-10 code that could not be mapped directly.
     ccsr : pd.DataFrame
         DataFrame containing the official mappings published by CCSR.
         Must have the following columns:
@@ -667,12 +664,8 @@ def get_distantly_related(unmapped, ccsr, verbose):
 
     Parameters
     ----------
-    unmapped : pd.DataFrame
-        A DataFrame with only one columns:
-
-        =============  ========================================================
-        icd            Unmapped ICD-10 codes without close relatives (as `str`)
-        =============  ========================================================
+    unmapped : str 
+        ICD-10 code that could not be mapped directly.
 
     ccsr : pd.DataFrame
         DataFrame containing the official mappings published by CCSR.
@@ -750,8 +743,8 @@ def get_halfsibs(icd, ccsr):
 
     Parameters
     ----------
-    icd : Series
-        A Series with ICD-10 codes as its only element.
+    icd : str 
+        ICD-10 code that could not be mapped directly.
     ccsr : pd.DataFrame
         DataFrame containing the official mappings published by CCSR.
         Must have the following columns:
@@ -815,8 +808,8 @@ def get_cousins(icd, ccsr):
 
     Parameters
     ----------
-    icd : Series
-        A Series with ICD-10 codes as its only element.
+    icd : str 
+        ICD-10 code that could not be mapped directly.
     ccsr : pd.DataFrame
         DataFrame containing the official mappings published by CCSR.
         Must have the following columns:
@@ -874,8 +867,8 @@ def get_extfam(icd, ccsr):
 
     Parameters
     ----------
-    icd : Series
-        A Series with ICD-10 codes as its only element.
+    icd : str 
+        ICD-10 code that could not be mapped directly.
     ccsr : pd.DataFrame
         DataFrame containing the official mappings published by CCSR.
         Must have the following columns:
