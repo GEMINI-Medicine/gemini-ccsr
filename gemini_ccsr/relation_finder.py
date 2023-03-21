@@ -208,7 +208,7 @@ def get_predicted(unmapped, ccsr, verbose):
          
     
     #%% PREDICTIONS BASED ON CLOSELY RELATED CODES
-    ccsr_colnames = ['ccsr_{}'.format(i) for i in range(1, 6)]
+    ccsr_colnames = ['ccsr_{}'.format(i) for i in range(1, 7)]
 
     # Get codes that are unmapped after direct mapping
     related_close = unmapped.sort_values('icd')
