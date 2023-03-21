@@ -399,7 +399,7 @@ def check_ccsr(ccsr):
     """
     
     #ccsr = ccsr.replace(r'^\s*$', np.nan, regex=True)
-    ccsr.replace(['', ' ', '\x00', 'NA', None], np.nan, inplace=True)
+    ccsr.replace(['', ' ', '\x00', 'NA', None], None, inplace=True)
     ccsr = ccsr.where(pd.notnull(ccsr), None)
     cols = ['icd', 'ccsr_def', 'ccsr_def_desc',
             'ccsr_1', 'ccsr_1_desc', 'ccsr_2', 'ccsr_2_desc',
