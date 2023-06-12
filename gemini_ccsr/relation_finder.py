@@ -318,7 +318,8 @@ def get_predicted(unmapped, ccsr, verbose):
     
     
         # loop through each unmapped ICD code and check agreement among distantly related codes' CCSR categories
-        # starting with children, then siblings, then parents
+        # starting with half-siblings, then cousins, then extended family 
+        # -> break as soon as any relationship type was found (only closest type of distant relationships contributes to mapping)
         for icd in iterator:
             
             icd_related = get_distantly_related(icd, ccsr, verbose) # get related codes of queried_icd code
@@ -337,7 +338,7 @@ def get_predicted(unmapped, ccsr, verbose):
                     
                     if icd_relation_temp.empty: # DIFFERENCE TO CLOSE relationships: Only include categories from 'closest' distant family group (e.g., if half-siblings exist, only include those and ignore cousins/extended family)
                         icd_relation_temp = pd.concat([icd_relation_temp,icd_relation]) # keep track of all categories that occured among any distant relatives
-                        dist_rel = relation # save which type of relationship was shown (only 1 for distant code relationships)
+                        #dist_rel = relation # save which type of relationship was shown (only 1 for distant code relationships)
                     
                     code_counts = icd_relation[
                         ccsr_colnames].stack().value_counts() 
@@ -358,7 +359,9 @@ def get_predicted(unmapped, ccsr, verbose):
                         distfam_resolved = pd.concat([distfam_resolved, res])
                         
                         automatic = True
-                        break                
+                    
+                    if len(icd_relation) > 0: # for distantly related codes only: break loop right after 1st type of relationship was identified 
+                        break
 
                     
                 if not automatic and not icd_relation_temp.empty: # if no category agreement found, get all unique categories and percentage of overlap across all relationships
