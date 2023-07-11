@@ -3,17 +3,18 @@ from gemini_ccsr import formatter
 import pandas as pd
 
 def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
+    
     """Tries to predict the CCSR mapping of each ICD-10 code.
 
     If a diagnosis code is in the `official_ccsr` dataframe, then its CCSR mapping
     is returned in the `direct` DataFrame.
-    
+
     If the diagnosis code is not found in the `official_ccsr` dataframe, the 
     algorithm first checks for closely related codes (`Children`, `Siblings`, 
     or `Parents`) with known CCSR mappings. If no close relatives 
     are found, the algorithm checks for distantly related codes (`Half-siblings`, 
     `Cousins`, or `Extended family`). 
-    
+
     If no close/distant relatives are found, the diagnosis code is returned in 
     the `failed` DataFrame and needs to be mapped manually.
 
@@ -64,7 +65,7 @@ def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
         Mapped CCSR categories of ICD-10 codes that could be mapped directly. 
         Returns the corresponding rows from the offical CCSR file. Has the 
         following columns:
-        
+
         =============  =================================================
         icd            ICD-10 code (as `str`)
         ccsr_def       default CCSR category (as `str`)
@@ -82,7 +83,7 @@ def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
         ccsr_6         CCSR category 6 (as `str`)
         ccsr_6_desc    CCSR category 6 description (as `str`)
         =============  =================================================
-        
+
     automatic : pd.DataFrame
         Predicted CCSR categories for ICD-10 codes that could not be mapped directly,
         but whose CCSR categorization could be inferred based on related codes.
@@ -143,11 +144,11 @@ def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
         The items of query_icd corresponding to ICD-10 codes that do not have 
         any closely or distantly related codes in the official CCSR file. Only
         contains a single column for the failed ICD-10 codes.
-        
+
         ===============  =====================================================
         queried_icd      Failed ICD-10 codes (as `str`)
         ===============  =====================================================
-    
+
     """
     official_ccsr = formatter.check_ccsr(official_ccsr)
     query_icd = formatter.check_icd(query_icd)

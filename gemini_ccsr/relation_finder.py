@@ -5,6 +5,7 @@ from tqdm import tqdm
 
 
 def get_direct_unmapped(icd, ccsr):
+    
     """Finds ICD-10 codes that match a diagnosis code in the official CCSR file
     and can be mapped directly to the corresponding CCSR categories.
 
@@ -42,9 +43,9 @@ def get_direct_unmapped(icd, ccsr):
     Returns
     -------
     direct : pd.DataFrame
-        The rows of `ccsr` for ICD-10 codes in `icd` that matched diagnosis 
+        The rows of `ccsr` for ICD-10 codes in `icd` that matched diagnosis
         codes in the official CCSR mapping file.
-        
+
         =============  =================================================
         icd            ICD-10 codes (as `str`)
         ccsr_def       default CCSR category (as `str`)
@@ -62,15 +63,15 @@ def get_direct_unmapped(icd, ccsr):
         ccsr_6         CCSR category 6 (as `str`)
         ccsr_6_desc    CCSR category 6 description (as `str`)
         =============  =================================================
-        
+
     unmapped: pd.DataFrame
         The rows of `icd` whose entries do not appear in `ccsr`.
-        
+
         =============  =================================================
         icd            ICD-10 codes that could not be mapped directly 
                        (as `str`)
         =============  =================================================
-        
+
     """
     print('1) Getting direct mapping for existing codes in official CCSR.')
     direct_attempt = pd.merge(ccsr, icd, how='right', on='icd')
@@ -91,7 +92,7 @@ def get_predicted(unmapped, ccsr, verbose):
     codes (`Children`, `Siblings`, or `Parents`) with known CCSR mappings. 
     If no close relatives are found, the algorithm checks for distantly related
     codes (`Half-siblings`, `Cousins`, or `Extended family`). 
-    
+
     If no close/distant relatives are found, the diagnosis code is returned in 
     the `failed` DataFrame and needs to be mapped manually.
 
@@ -104,7 +105,7 @@ def get_predicted(unmapped, ccsr, verbose):
     If a diagnosis code has close/distant relatives all family members have 
     one or more categories in common, then that code is mapped to all shared 
     categories and returned in the `automatic` DataFrame.
-    
+
 
 
     Parameters
@@ -204,10 +205,9 @@ def get_predicted(unmapped, ccsr, verbose):
         The rows of `query_icd` corresponding to ICD-10 codes that do not have 
         any closely or distantly related codes in the official CCSR file.
     """
-       
-         
-    
-    #%% PREDICTIONS BASED ON CLOSELY RELATED CODES
+
+
+    # %% PREDICTIONS BASED ON CLOSELY RELATED CODES
     ccsr_colnames = ['ccsr_{}'.format(i) for i in range(1, 7)]
 
     # Get codes that are unmapped after direct mapping
@@ -294,7 +294,7 @@ def get_predicted(unmapped, ccsr, verbose):
     
 
     
-    #%% PREDICTIONS BASED ON DISTANTLY RELATED CODES
+    # %% PREDICTIONS BASED ON DISTANTLY RELATED CODES
 
     distfam_resolved = pd.DataFrame(columns = ['ccsr_1', 'ccsr_2', 'ccsr_3', 'ccsr_4', 'ccsr_5', 'ccsr_6','deciding_relationship','queried_icd','related_codes'])
     distfam_unresolved = pd.DataFrame([])
@@ -389,9 +389,7 @@ def get_predicted(unmapped, ccsr, verbose):
     
 
                       
-    #%% MERGE CLOSELY/DISTANTLY RELATED & RESOLVED CODES, RETURN WITH UNRESOLVED & FAILED CODES
-    #automatic = pd.DataFrame(columns = ['queried_icd', 'deciding_relationship', 'ccsr_1',
-    #                    'ccsr_2', 'ccsr_3', 'ccsr_4', 'ccsr_5', 'ccsr_6','related_codes'])
+    # %% MERGE CLOSELY/DISTANTLY RELATED & RESOLVED CODES, RETURN WITH UNRESOLVED & FAILED CODES
     automatic = pd.concat([closefam_resolved,
         distfam_resolved]).reset_index(drop=True)
 
@@ -720,8 +718,8 @@ def get_distantly_related(unmapped, ccsr, verbose):
         =============  ==================================================
 
     """
-    
-    
+
+
     related_df = pd.DataFrame([])
     
     for func in [get_halfsibs,get_cousins,get_extfam]:

@@ -5,6 +5,7 @@ pd.options.mode.chained_assignment = None
 
 
 def get_default_map(official_ccsr):
+    
     """Returns a mapping from CCSR categories to their default.
 
     Parameters
@@ -48,6 +49,7 @@ def get_default_map(official_ccsr):
 
 
 def get_desc_df(official_ccsr):
+    
     """Returns a dataframe map from a CCSR category to its description.
 
     Parameters
@@ -157,7 +159,7 @@ def add_default(output_ccsr, official_ccsr):
         The `output_ccsr` input DataFrame with a CCSR default category
         column added.
     """
-    
+
     output_ccsr = output_ccsr.copy()
     default_map = get_default_map(official_ccsr)
     ccsr_cols = ['ccsr_{}'.format(i) for i in range(1, 7)]
@@ -198,6 +200,7 @@ def add_default(output_ccsr, official_ccsr):
 
 
 def add_descs(output_ccsr, official_ccsr, automatic_format=True):
+    
     """Adds CCSR descriptions to the output DataFrame with mapped CCSR 
     categories. This is only relevant for the automatic and semi-automatic
     DataFrames. Since the automatic vs. semi-automatic output DataFrames are 
@@ -240,7 +243,7 @@ def add_descs(output_ccsr, official_ccsr, automatic_format=True):
         mapped ICD-10 codes, where each row of ccsr_1 corresponds to a 
         candidate CCSR category. In this case, no CCSR default category exists. 
         Must have the following columns:
-        
+
         ==================  ================================================
         queried_icd         ICD-10 codes that were mapped semi-automatically 
                             (as `str`)
@@ -280,7 +283,7 @@ def add_descs(output_ccsr, official_ccsr, automatic_format=True):
         Flag indicating whether `output_ccsr` DataFrame corresponds to 
         automatically mapped codes (True) or semi-automatically mapped codes
         (False). 
-    
+
     Returns
     -------
     output_ccsr : pd.DataFrame
@@ -319,6 +322,7 @@ def add_descs(output_ccsr, official_ccsr, automatic_format=True):
 
 
 def check_icd(query_icd):
+    
     """Checks that query_icd is formatted correctly.
 
     Parameters
@@ -341,7 +345,7 @@ def check_icd(query_icd):
         query_icd        Correctly formatted ICD-10 codes to be mapped 
                          (as `str`)
         ===============  =====================================================
-        
+
     """
     try:
         temp = np.array(query_icd)
@@ -365,6 +369,7 @@ def check_icd(query_icd):
 
 
 def check_ccsr(ccsr):
+    
     """Checks that the ccsr DataFrame containing the official CCSR mapping
     is formatted correctly.
 
@@ -397,7 +402,7 @@ def check_ccsr(ccsr):
     ccsr : pd.DataFrame
         The input DataFrame with `only` the mandatory columns.
     """
-    
+
     #ccsr = ccsr.replace(r'^\s*$', np.nan, regex=True)
     ccsr.replace(['', ' ', '\x00', 'NA', None], None, inplace=True)
     ccsr = ccsr.where(pd.notnull(ccsr), None)
