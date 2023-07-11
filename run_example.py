@@ -17,7 +17,7 @@ ccsr = pd.read_csv('example_ccsr_v2020-3.csv', dtype='str')
 icd = pd.read_csv('example_codes_to_map.csv', dtype='str')
 icd = icd['diagnosis_code'].tolist()
 
-#... or provide list of codes here
+# ... or provide list of codes here
 # icd = ['A001','A081','A1611','C767','E1030','E750','E90',
 #        'F001','F012','G3109','H04209','I132','N26','O37033',
 #        'R1958','S917','T86881','Z017','Z507']

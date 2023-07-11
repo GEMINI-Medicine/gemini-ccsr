@@ -9,23 +9,23 @@ def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
     If a diagnosis code is in the `official_ccsr` dataframe, then its CCSR mapping
     is returned in the `direct` DataFrame.
 
-    If the diagnosis code is not found in the `official_ccsr` dataframe, the 
-    algorithm first checks for closely related codes (`Children`, `Siblings`, 
-    or `Parents`) with known CCSR mappings. If no close relatives 
-    are found, the algorithm checks for distantly related codes (`Half-siblings`, 
-    `Cousins`, or `Extended family`). 
+    If the diagnosis code is not found in the `official_ccsr` dataframe, the
+    algorithm first checks for closely related codes (`Children`, `Siblings`,
+    or `Parents`) with known CCSR mappings. If no close relatives
+    are found, the algorithm checks for distantly related codes (`Half-siblings`,
+    `Cousins`, or `Extended family`).
 
-    If no close/distant relatives are found, the diagnosis code is returned in 
+    If no close/distant relatives are found, the diagnosis code is returned in
     the `failed` DataFrame and needs to be mapped manually.
 
     If a diagnosis code has close/distant relatives with known CCSR
-    mappings but none of the CCSR categories are shared by *all* identified 
-    family members, then the code is returned in the `semiautomatic` DataFrame 
+    mappings but none of the CCSR categories are shared by *all* identified
+    family members, then the code is returned in the `semiautomatic` DataFrame
     (along with the percentage of family members that share each candidate
     CCSR category).
 
-    If a diagnosis code has close/distant relatives all family members have 
-    one or more categories in common, then that code is mapped to all shared 
+    If a diagnosis code has close/distant relatives all family members have
+    one or more categories in common, then that code is mapped to all shared
     categories and returned in the `automatic` DataFrame.
 
 
@@ -58,12 +58,12 @@ def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
     verbose : bool
         If True, progress bars are printed.
 
-    
+
     Returns
     -------
     direct : pd.DataFrame
-        Mapped CCSR categories of ICD-10 codes that could be mapped directly. 
-        Returns the corresponding rows from the offical CCSR file. Has the 
+        Mapped CCSR categories of ICD-10 codes that could be mapped directly.
+        Returns the corresponding rows from the offical CCSR file. Has the
         following columns:
 
         =============  =================================================
@@ -93,7 +93,7 @@ def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
         queried_icd            ICD-10 codes that were mapped automatically (as `str`)
         deciding_relationship  The relationship that the related ICD-10 codes in
                                `official_ccsr` have to the queried_icd (as `str`)
-        related_codes          A list of all ICD-10 codes that were found in 
+        related_codes          A list of all ICD-10 codes that were found in
                                `official_ccsr` and have the `deciding_relationship`
                                to `queried_icd` (as `list`)
         ccsr_def               default CCSR category (as `str`)
@@ -114,15 +114,15 @@ def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
         =====================  =========================================
 
     semiautomatic: pd.DataFrame
-        Predicted CCSR categories for ICD-10 codes that could not be mapped 
+        Predicted CCSR categories for ICD-10 codes that could not be mapped
         directly or automatically. These are diagnosis codes for which the
-        algorithm identified related codes, but none of the CCSR categories 
+        algorithm identified related codes, but none of the CCSR categories
         are shared by all related codes (i.e., CCSR mapping could not be
-        inferred automatically). Has one row for each [ICD-10 code, candidate 
-        CCSR] combination. Additionally provides the percentage of related 
-        codes that share each predicted CCSR category. Users need to review 
+        inferred automatically). Has one row for each [ICD-10 code, candidate
+        CCSR] combination. Additionally provides the percentage of related
+        codes that share each predicted CCSR category. Users need to review
         the output file to exclude any rows with incorrect predictions. As
-        opposed to automatically mapped codes, semi-automatic codes are 
+        opposed to automatically mapped codes, semi-automatic codes are
         returned without default CCSR category. Users need to carefully inspect
         the smeiautomatic output and choose a default CCSR category after
         validating the predicted CCSR categories. Has the following columns:
@@ -130,18 +130,18 @@ def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
         ===============  =====================================================
         queried_icd      ICD-10 codes that were mapped semi-automatically
                          (as `str`)
-        relationship     The type of relationship (`Close`/`Distant`) that the 
-                         related ICD-10 codes in `official_ccsr` have to the 
+        relationship     The type of relationship (`Close`/`Distant`) that the
+                         related ICD-10 codes in `official_ccsr` have to the
                          `queried_icd` (as `str`)
         pred_ccsr        Predicted CCSR category (as `str`)
         pred_ccsr_desc   Predicted CCSR category description (as `str`)
-        prct_fam_agree   Percentage of related diagnosis codes in the official 
-                         CCSR file that share the predicted CCSR category 
+        prct_fam_agree   Percentage of related diagnosis codes in the official
+                         CCSR file that share the predicted CCSR category
                          (as `num`)
         ===============  =====================================================
 
     failed : pd.DataFrame
-        The items of query_icd corresponding to ICD-10 codes that do not have 
+        The items of query_icd corresponding to ICD-10 codes that do not have
         any closely or distantly related codes in the official CCSR file. Only
         contains a single column for the failed ICD-10 codes.
 
