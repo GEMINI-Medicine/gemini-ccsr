@@ -244,12 +244,15 @@ def get_predicted(unmapped, ccsr, verbose):
                 if len(icd_relation) == 0: # check if close family member exists, if not, check next close family group
                     continue
                 
-                icd_relation_temp = pd.concat([icd_relation_temp,icd_relation]) # keep track of all categories that occured among any close relatives
+                # keep track of all categories that occured among any close relatives
+                icd_relation_temp = pd.concat([icd_relation_temp,icd_relation]) 
                 
                 code_counts = icd_relation[
                     ccsr_colnames].stack().value_counts() 
+                
+                # identify CCSR1-6 categories that match across all children/sibl/parent codes
                 agreed_codes = code_counts[
-                    code_counts == len(icd_relation)].index.to_list() # identify CCSR1-6 categories that match across all children/sibl/parent codes (CCSR categories don't need to be in same order)
+                    code_counts == len(icd_relation)].index.to_list() 
                 
                 if agreed_codes:
                     agreed_codes.extend((6 - len(agreed_codes))*[None]) 
@@ -266,7 +269,8 @@ def get_predicted(unmapped, ccsr, verbose):
                     automatic = True
                     break
             
-            if not automatic and not icd_relation_temp.empty: # if no category agreement found, get all unique categories and percentage of overlap across all relationship
+            # if no category agreement found, get all unique categories and percentage of overlap across all relationship
+            if not automatic and not icd_relation_temp.empty: 
                 # for each category among any close family members, get percentage of shared
                 code_perc = pd.Series(100*icd_relation_temp[ccsr_colnames].stack().value_counts()/len(icd_relation_temp)).to_frame(name = 'prct_fam_agree').round(decimals=2) 
                 code_perc['queried_icd'] = icd
@@ -280,7 +284,7 @@ def get_predicted(unmapped, ccsr, verbose):
                 if len(code_perc) == 0: # if no categories that are shared by at least 5% of related codes, return as failed
                     closefam_failed = pd.concat([closefam_failed,pd.DataFrame({'queried_icd': [icd]})])
                 else: # add any shared categories among related codes
-                    code_perc['relationship'] = 'Close' #code_perc.apply(lambda row: tuple(sorted(icd_related['relationship'].drop_duplicates())), axis = 1)
+                    code_perc['relationship'] = 'Close' 
                     closefam_unresolved = pd.concat([closefam_unresolved,code_perc])
         
         else: # if no close relationships found at all
@@ -296,7 +300,8 @@ def get_predicted(unmapped, ccsr, verbose):
     
     # %% PREDICTIONS BASED ON DISTANTLY RELATED CODES
 
-    distfam_resolved = pd.DataFrame(columns = ['ccsr_1', 'ccsr_2', 'ccsr_3', 'ccsr_4', 'ccsr_5', 'ccsr_6','deciding_relationship','queried_icd','related_codes'])
+    distfam_resolved = pd.DataFrame(columns = [
+        'ccsr_1', 'ccsr_2', 'ccsr_3', 'ccsr_4', 'ccsr_5', 'ccsr_6','deciding_relationship','queried_icd','related_codes'])
     distfam_unresolved = pd.DataFrame([])
     distfam_failed = pd.DataFrame(columns = ['queried_icd'])
     
@@ -336,14 +341,19 @@ def get_predicted(unmapped, ccsr, verbose):
                     if len(icd_relation) == 0: # check if distant family member exists, if not, check next distant family group
                         continue
                     
-                    if icd_relation_temp.empty: # DIFFERENCE TO CLOSE relationships: Only include categories from 'closest' distant family group (e.g., if half-siblings exist, only include those and ignore cousins/extended family)
-                        icd_relation_temp = pd.concat([icd_relation_temp,icd_relation]) # keep track of all categories that occured among any distant relatives
-                        #dist_rel = relation # save which type of relationship was shown (only 1 for distant code relationships)
+                    if icd_relation_temp.empty: 
+                        # DIFFERENCE TO CLOSE relationships: Only include categories from 'closest' distant family group 
+                        # (e.g., if half-siblings exist, only include those and ignore cousins/extended family)
+                        # keep track of all categories that occured among any distant relatives    
+                        icd_relation_temp = pd.concat([icd_relation_temp,icd_relation]) 
+                        
                     
                     code_counts = icd_relation[
                         ccsr_colnames].stack().value_counts() 
+                    
+                    # identify CCSR1-6 categories that match across all half-siblings/cousins/ext. fam. codes
                     agreed_codes = code_counts[
-                        code_counts == len(icd_relation)].index.to_list() # identify CCSR1-6 categories that match across all half-siblings/cousins/ext. fam. codes (CCSR categories don't need to be in same order)
+                        code_counts == len(icd_relation)].index.to_list() 
                     
                     if agreed_codes:
                         agreed_codes.extend((6 - len(agreed_codes))*[None]) 
