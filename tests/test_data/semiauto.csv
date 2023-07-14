@@ -1,0 +1,32 @@
+queried_icd,pred_ccsr,pred_ccsr_desc,relationship,prct_fam_agree
+C767,NEO069,Cancer of other sites,Close,80.0
+C767,NEO010,Head and neck cancers - all other types,Close,20.0
+F001,NVS011,Neurocognitive disorders,Distant,43.48
+F001,MBD001,Schizophrenia spectrum and other psychotic disorders,Distant,13.04
+F001,MBD002,Depressive disorders,Distant,13.04
+F001,MBD013,Miscellaneous mental and behavioral disorders/conditions,Distant,13.04
+F001,MBD003,Bipolar and related disorders,Distant,8.7
+F001,MBD004,Other specified and unspecified mood disorders,Distant,4.35
+F001,MBD005,Anxiety and fear-related disorders,Distant,4.35
+F001,MBD009,Personality disorders,Distant,4.35
+N26,GEN006,Other specified and unspecified diseases of kidney and ureters,Close,66.67
+N26,GEN001,Nephritis; nephrosis; renal sclerosis,Close,16.67
+N26,GEN005,Calculus of urinary tract,Close,16.67
+O37033,PRG013,Maternal care related to fetal conditions,Distant,51.24
+O37033,PRG012,Multiple gestation,Distant,26.92
+O37033,PRG024,"Malposition, disproportion or other labor complications",Distant,11.45
+O37033,PRG017,Maternal care for abnormality of pelvic organs,Distant,5.31
+O37033,PRG005,Ectopic pregnancy and complications of ectopic pregnancy,Distant,3.31
+O37033,PRG018,Maternal care related to disorders of the placenta and placental implantation,Distant,3.31
+O37033,MBD017,Alcohol-related disorders,Distant,0.83
+O37033,MBD025,Other specified substance-related disorders,Distant,0.83
+O37033,PRG028,Other specified complications in pregnancy,Distant,0.83
+O37033,PRG011,Early or threatened labor,Distant,0.47
+O37033,PRG016,Previous C-section,Distant,0.47
+S917,INJ012,"Open wounds to limbs, initial encounter",Distant,33.33
+S917,INJ049,"Open wounds to limbs, subsequent encounter",Distant,33.33
+S917,INJ073,"Injury, sequela",Distant,33.33
+Z507,FAC019,Socioeconomic/psychosocial factors,Distant,46.43
+Z507,FAC025,Other specified status,Distant,45.24
+Z507,FAC010,Other aftercare encounter,Distant,4.76
+Z507,FAC006,Encounter for antineoplastic therapies,Distant,3.57
