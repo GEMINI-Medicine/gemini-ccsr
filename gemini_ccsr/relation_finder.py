@@ -271,8 +271,8 @@ def get_predicted(unmapped, ccsr, verbose):
             if not automatic and not icd_relation_temp.empty:
                 # for each category among any close family members, get percentage of shared
                 code_perc = pd.Series(
-                    100*icd_relation_temp[ccsr_colnames].stack().
-                    value_counts()/len(icd_relation_temp)).to_frame(name='prct_fam_agree').round(decimals=2)
+                    100*icd_relation_temp[ccsr_colnames].stack().value_counts() /
+                    len(icd_relation_temp)).to_frame(name='prct_fam_agree').round(decimals=2)
                 code_perc['queried_icd'] = icd
                 code_perc.sort_values(by=['prct_fam_agree'], ascending=False)
 
@@ -361,8 +361,8 @@ def get_predicted(unmapped, ccsr, verbose):
                 if not automatic and not icd_relation_temp.empty:
                     # for each category among any distant family members, get percentage of shared
                     code_perc = pd.Series(
-                        100*icd_relation_temp[ccsr_colnames].stack().
-                        value_counts()/len(icd_relation_temp)).to_frame(name='prct_fam_agree').round(decimals=2) 
+                        100*icd_relation_temp[ccsr_colnames].stack().value_counts() /
+                        len(icd_relation_temp)).to_frame(name='prct_fam_agree').round(decimals=2) 
                     code_perc['queried_icd'] = icd
 
                     if len(code_perc) == 0:  # if no categories that are shared by at least 5% of related codes, return as failed
