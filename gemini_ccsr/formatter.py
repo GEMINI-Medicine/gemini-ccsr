@@ -49,7 +49,7 @@ def get_default_map(official_ccsr):
 
 
 def get_desc_df(official_ccsr):
-    
+
     """Returns a dataframe map from a CCSR category to its description.
 
     Parameters
@@ -165,33 +165,35 @@ def add_default(output_ccsr, official_ccsr):
     ccsr_cols = ['ccsr_{}'.format(i) for i in range(1, 7)]
     # add all mapped CCSR1-6 codes as tuple in last column
     output_ccsr['ccsr_tup'] = output_ccsr[ccsr_cols].apply(
-        lambda row: tuple(sorted(row[row.notna()].to_list())), axis=1) 
-    
-    # replace with None if specified key does not exist in default map 
+        lambda row: tuple(sorted(row[row.notna()].to_list())), axis=1)
+
+    # replace with None if specified key does not exist in default map
     output_ccsr['ccsr_def'] = output_ccsr['ccsr_tup'].apply(
-        lambda tup: default_map.get(tup, None)) 
+        lambda tup: default_map.get(tup, None))
 
-
-    iterator = output_ccsr.loc[output_ccsr['ccsr_def'].isna(),'queried_icd']
+    iterator = output_ccsr.loc[output_ccsr['ccsr_def'].isna(), 'queried_icd']
 
     for icd in iterator:
 
         # if only 1 shared category (CCSR1, but not CCSR2) -> use that one as default
-        if pd.isnull(output_ccsr.loc[output_ccsr['queried_icd'] == icd,'ccsr_2']).bool():
-            output_ccsr.loc[output_ccsr['queried_icd'] == icd,'ccsr_def'] = output_ccsr.loc[output_ccsr['queried_icd'] == icd,'ccsr_1']
+        if pd.isnull(output_ccsr.loc[output_ccsr['queried_icd'] == icd, 'ccsr_2']).bool():
+            output_ccsr.loc[output_ccsr['queried_icd'] == icd, 'ccsr_def'] = output_ccsr.loc[
+                output_ccsr['queried_icd'] == icd, 'ccsr_1']
 
         # if more than one shared category, which one of shared categories is most commonly default among related codes?
         else:
             rel_tup = output_ccsr.loc[output_ccsr['queried_icd'] == icd]['related_codes'].values[0]
             rel = official_ccsr.loc[official_ccsr['icd'].isin(rel_tup)]
-            
+
             # get categories that are shared between all related codes
-            shared_cat = output_ccsr.loc[output_ccsr['queried_icd'] == icd,'ccsr_tup'].values[0]
+            shared_cat = output_ccsr.loc[output_ccsr['queried_icd'] == icd, 'ccsr_tup'].values[0]
             # are any of the shared categories default categories? If yes, which one most frequent one?
-            shared_def = rel.loc[rel['ccsr_def'].isin(shared_cat),'ccsr_def']
+            shared_def = rel.loc[rel['ccsr_def'].isin(shared_cat), 'ccsr_def']
             if not shared_def.empty:
-                output_ccsr.loc[output_ccsr['queried_icd'] == icd,'ccsr_def'] = shared_def.value_counts().sort_values(ascending = False).index[0]   
-            
+                output_ccsr.loc[
+                    output_ccsr['queried_icd'] == icd, 'ccsr_def'] = shared_def.value_counts().sort_values(
+                        ascending=False).index[0]
+
     output_ccsr = output_ccsr.drop(columns=['ccsr_tup'])
 
     return output_ccsr
@@ -311,15 +313,15 @@ def add_descs(output_ccsr, official_ccsr, automatic_format=True):
                  + all_ccsr_colnames)
     output_ccsr = output_ccsr[col_order]
 
-    if automatic_format == False: # For semi-automatic codes, rename from ccsr_1 to pred_ccsr and change column order
-        output_ccsr.rename(columns={'ccsr_1': 'pred_ccsr', 'ccsr_1_desc': 'pred_ccsr_desc'},inplace=True)
-        output_ccsr = output_ccsr[['queried_icd', 'pred_ccsr','pred_ccsr_desc', 'relationship', 'prct_fam_agree']]
+    if automatic_format is False:  # For semi-automatic codes, rename from ccsr_1 to pred_ccsr and change column order
+        output_ccsr.rename(columns={'ccsr_1': 'pred_ccsr', 'ccsr_1_desc': 'pred_ccsr_desc'}, inplace=True)
+        output_ccsr = output_ccsr[['queried_icd', 'pred_ccsr', 'pred_ccsr_desc', 'relationship', 'prct_fam_agree']]
 
     return output_ccsr
 
 
 def check_icd(query_icd):
-    
+
     """Checks that query_icd is formatted correctly.
 
     Parameters
@@ -355,7 +357,7 @@ def check_icd(query_icd):
     # remove NaNs
     query_icd = [e for e in query_icd if e == e]
 
-    ## Make sure all codes start with capitalized letters
+    # Make sure all codes start with capitalized letters
     query_icd = [i.capitalize() for i in query_icd]
 
     query_icd = sorted(query_icd)
@@ -366,7 +368,7 @@ def check_icd(query_icd):
 
 
 def check_ccsr(ccsr):
-    
+
     """Checks that the ccsr DataFrame containing the official CCSR mapping
     is formatted correctly.
 
@@ -400,7 +402,6 @@ def check_ccsr(ccsr):
         The input DataFrame with `only` the mandatory columns.
     """
 
-    #ccsr = ccsr.replace(r'^\s*$', np.nan, regex=True)
     ccsr.replace(['', ' ', '\x00', 'NA', None], None, inplace=True)
     ccsr = ccsr.where(pd.notnull(ccsr), None)
     cols = ['icd', 'ccsr_def', 'ccsr_def_desc',

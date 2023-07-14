@@ -3,7 +3,8 @@ from gemini_ccsr import formatter
 import pandas as pd
 
 def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
-    
+
+
     """Tries to predict the CCSR mapping of each ICD-10 code.
 
     If a diagnosis code is in the `official_ccsr` dataframe, then its CCSR mapping
@@ -156,17 +157,17 @@ def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
     direct, unmapped = relation_finder.get_direct_unmapped(
         query_icd, official_ccsr)
     # 2) Find codes in official CCSR file that are (closely/distantly) related to unmapped codes
-    if not unmapped.empty: # only if there are any codes that couldn't be mapped directly
+    if not unmapped.empty:  # only if there are any codes that couldn't be mapped directly
         automatic, semiautomatic, failed = relation_finder.get_predicted(
             unmapped, official_ccsr, verbose)
-        # For automatic codes: Add default CCSR category based on existing combinations of CCSR1-6 in CCSR file 
+        # For automatic codes: Add default CCSR category based on existing combinations of CCSR1-6 in CCSR file
         # if combination does not exist, use CCSR1 as default
         if not automatic.empty:
             automatic = formatter.add_default(automatic, official_ccsr)
-            automatic = formatter.add_descs(automatic, official_ccsr,True)
+            automatic = formatter.add_descs(automatic, official_ccsr, True)
         if not semiautomatic.empty:
-            semiautomatic = formatter.add_descs(semiautomatic, official_ccsr,False)
-    else: # return empty data frame if all codes could be mapped directly
+            semiautomatic = formatter.add_descs(semiautomatic, official_ccsr, False)
+    else:  # return empty data frame if all codes could be mapped directly
         automatic = semiautomatic = failed = pd.DataFrame([])
-        
+
     return direct, automatic, semiautomatic, failed
