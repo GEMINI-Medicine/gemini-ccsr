@@ -2,8 +2,8 @@ from gemini_ccsr import relation_finder
 from gemini_ccsr import formatter
 import pandas as pd
 
-def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
 
+def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
 
     """Tries to predict the CCSR mapping of each ICD-10 code.
 

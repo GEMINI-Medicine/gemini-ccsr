@@ -283,11 +283,11 @@ def get_predicted(unmapped, ccsr, verbose):
                     closefam_unresolved = pd.concat([closefam_unresolved, code_perc])
 
         else:  # if no close relationships found at all
-            closefam_failed = pd.concat([closefam_failed,pd.DataFrame({'queried_icd': [icd]})])
+            closefam_failed = pd.concat([closefam_failed, pd.DataFrame({'queried_icd': [icd]})])
 
     if not closefam_unresolved.empty:
         closefam_unresolved = closefam_unresolved.reset_index(drop=False).rename(
-            columns={'index': 'ccsr_1'}).loc[:,['queried_icd', 'ccsr_1', 'prct_fam_agree', 'relationship']]
+            columns={'index': 'ccsr_1'}).loc[:, ['queried_icd', 'ccsr_1', 'prct_fam_agree', 'relationship']]
 
     # %% PREDICTIONS BASED ON DISTANTLY RELATED CODES
 
@@ -323,7 +323,8 @@ def get_predicted(unmapped, ccsr, verbose):
             if not icd_related.empty:  # if any distant relationships found
                 for relation in ['Half-Siblings', 'Cousins', 'Extended Family']:
                     icd_relation = icd_related[icd_related['relationship'] == relation]
-                    if len(icd_relation) == 0:  # check if distant family member exists, if not, check next distant family group
+                    # check if distant family member exists, if not, check next distant family group
+                    if len(icd_relation) == 0:  
                         continue
 
                     if icd_relation_temp.empty:
@@ -346,7 +347,7 @@ def get_predicted(unmapped, ccsr, verbose):
                         res = pd.DataFrame({'queried_icd': icd,
                                             'deciding_relationship': relation,
                                             'related_codes': [list(icd_related.loc[
-                                                icd_related['relationship'] == relation,'icd'].values)]})
+                                                icd_related['relationship'] == relation, 'icd'].values)]})
 
                         res.loc[0, ['ccsr_1', 'ccsr_2', 'ccsr_3', 'ccsr_4', 'ccsr_5', 'ccsr_6']] = agreed_codes
 
@@ -362,38 +363,39 @@ def get_predicted(unmapped, ccsr, verbose):
                     # for each category among any distant family members, get percentage of shared
                     code_perc = pd.Series(
                         100*icd_relation_temp[ccsr_colnames].stack().value_counts() /
-                        len(icd_relation_temp)).to_frame(name='prct_fam_agree').round(decimals=2) 
+                        len(icd_relation_temp)).to_frame(name='prct_fam_agree').round(decimals=2)
                     code_perc['queried_icd'] = icd
 
-                    if len(code_perc) == 0:  # if no categories that are shared by at least 5% of related codes, return as failed
-                        distfam_failed = pd.concat([distfam_failed,pd.DataFrame({'queried_icd': [icd]})])
+                    # if no categories that are shared by at least 5% of related codes, return as failed
+                    if len(code_perc) == 0:  
+                        distfam_failed = pd.concat([distfam_failed, pd.DataFrame({'queried_icd': [icd]})])
                     else:  # add any found categories shared among related codes
-                        code_perc['relationship'] = 'Distant' 
+                        code_perc['relationship'] = 'Distant'
                         distfam_unresolved = pd.concat([distfam_unresolved, code_perc])
 
             else:  # if no distant relationships found at all
-                distfam_failed = pd.concat([distfam_failed,pd.DataFrame({'queried_icd': [icd]})])
+                distfam_failed = pd.concat([distfam_failed, pd.DataFrame({'queried_icd': [icd]})])
 
         if not distfam_unresolved.empty:
             distfam_unresolved = distfam_unresolved.reset_index(drop=False).rename(
-                columns={'index': 'ccsr_1'}).loc[:,['queried_icd', 'ccsr_1', 'prct_fam_agree', 'relationship']]
+                columns={'index': 'ccsr_1'}).loc[:, ['queried_icd', 'ccsr_1', 'prct_fam_agree', 'relationship']]
 
     # %% MERGE CLOSELY/DISTANTLY RELATED & RESOLVED CODES, RETURN WITH UNRESOLVED & FAILED CODES
     automatic = pd.concat([closefam_resolved,
-        distfam_resolved]).reset_index(drop=True)
+                           distfam_resolved]).reset_index(drop=True)
 
     automatic = automatic[['queried_icd', 'deciding_relationship', 'ccsr_1',
-                        'ccsr_2', 'ccsr_3', 'ccsr_4', 'ccsr_5', 'ccsr_6', 'related_codes']]
+                           'ccsr_2', 'ccsr_3', 'ccsr_4', 'ccsr_5', 'ccsr_6', 'related_codes']]
 
-    automatic.sort_values(["queried_icd"],axis = 0, ascending = [True],inplace = True,ignore_index=True)
+    automatic.sort_values(["queried_icd"], axis=0, ascending=[True], inplace=True, ignore_index=True)
 
     # semiautomatic
     semiautomatic = pd.DataFrame(columns = ['queried_icd', 'ccsr_1', 'prct_fam_agree', 'relationship'])
-    semiautomatic = pd.concat([semiautomatic,closefam_unresolved,
-        distfam_unresolved]).reset_index(drop=True)
+    semiautomatic = pd.concat([semiautomatic, closefam_unresolved,
+                               distfam_unresolved]).reset_index(drop=True)
 
     semiautomatic.sort_values(["queried_icd", "prct_fam_agree", "ccsr_1"], axis=0, ascending=[True, False, True],
-               inplace=True, ignore_index=True)
+                              inplace=True, ignore_index=True)
 
     # failed (don't include closefam_failed here because some of those would have been mapped
     # automatically using distant family relationship!)
