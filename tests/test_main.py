@@ -8,19 +8,18 @@ import numpy as np
 import ast
 
 
-
 class TestMain(unittest.TestCase):
     ccsr = pd.read_csv(
         'tests/test_data/clean_ccsr_v2020-3.csv', dtype=str).replace({np.nan: None})
     direct = pd.read_csv(
         'tests/test_data/direct.csv', dtype=str).replace({np.nan: None})
     automatic = pd.read_csv(
-        'tests/test_data/automatic.csv', dtype=str).replace({np.nan: None})    
+        'tests/test_data/automatic.csv', dtype=str).replace({np.nan: None})
     automatic['related_codes'] = automatic['related_codes'].apply(lambda x: ast.literal_eval(x))
 
     semiautomatic = pd.read_csv(
         'tests/test_data/semiautomatic.csv', dtype={'prct_fam_agree': float}).replace({np.nan: None})
-    
+
     failed = pd.read_csv(
         'tests/test_data/failed.csv', dtype=str).replace({np.nan: None})
     icd = pd.concat(
