@@ -769,7 +769,7 @@ def get_halfsibs(icd, ccsr):
 
     """
     halfsibs = pd.DataFrame([])
-    
+
     # check whether last 2 digits are within distance of +/- 9 of each other
     # (only if code has at least 5 characters)
     if len(icd) >= 5:
