@@ -7,8 +7,8 @@ def map_icd_to_ccsr(query_icd, official_ccsr, verbose=True):
 
     """Tries to predict the CCSR mapping of each ICD-10 code.
 
-    If a diagnosis code is in the `official_ccsr` dataframe, then its CCSR mapping
-    is returned in the `direct` DataFrame.
+    If a diagnosis code is in the `official_ccsr` dataframe, then its CCSR
+    mapping is returned in the `direct` DataFrame.
 
     If the diagnosis code is not found in the `official_ccsr` dataframe, the
     algorithm first checks for closely related codes (`Children`, `Siblings`,

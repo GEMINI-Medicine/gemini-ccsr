@@ -324,7 +324,7 @@ def get_predicted(unmapped, ccsr, verbose):
                 for relation in ['Half-Siblings', 'Cousins', 'Extended Family']:
                     icd_relation = icd_related[icd_related['relationship'] == relation]
                     # check if distant family member exists, if not, check next distant family group
-                    if len(icd_relation) == 0:  
+                    if len(icd_relation) == 0:
                         continue
 
                     if icd_relation_temp.empty:
@@ -367,7 +367,7 @@ def get_predicted(unmapped, ccsr, verbose):
                     code_perc['queried_icd'] = icd
 
                     # if no categories that are shared by at least 5% of related codes, return as failed
-                    if len(code_perc) == 0:  
+                    if len(code_perc) == 0:
                         distfam_failed = pd.concat([distfam_failed, pd.DataFrame({'queried_icd': [icd]})])
                     else:  # add any found categories shared among related codes
                         code_perc['relationship'] = 'Distant'
@@ -390,7 +390,7 @@ def get_predicted(unmapped, ccsr, verbose):
     automatic.sort_values(["queried_icd"], axis=0, ascending=[True], inplace=True, ignore_index=True)
 
     # semiautomatic
-    semiautomatic = pd.DataFrame(columns = ['queried_icd', 'ccsr_1', 'prct_fam_agree', 'relationship'])
+    semiautomatic = pd.DataFrame(columns=['queried_icd', 'ccsr_1', 'prct_fam_agree', 'relationship'])
     semiautomatic = pd.concat([semiautomatic, closefam_unresolved,
                                distfam_unresolved]).reset_index(drop=True)
 
@@ -401,7 +401,7 @@ def get_predicted(unmapped, ccsr, verbose):
     # automatically using distant family relationship!)
     failed = distfam_failed
     failed.sort_values(["queried_icd"], axis=0, ascending=True,
-               inplace=True, ignore_index=True)
+                       inplace=True, ignore_index=True)
 
     return automatic, semiautomatic, failed
 
@@ -488,7 +488,7 @@ def get_children(icd, ccsr):
 
     Parameters
     ----------
-    icd : str 
+    icd : str
         ICD-10 code that could not be mapped directly.
 
     ccsr : pd.DataFrame
@@ -546,7 +546,7 @@ def get_sibs(icd, ccsr):
 
     Parameters
     ----------
-    icd : str 
+    icd : str
         ICD-10 code that could not be mapped directly.
     ccsr : pd.DataFrame
         DataFrame containing the official mappings published by CCSR.
@@ -600,7 +600,7 @@ def get_parents(icd, ccsr):
 
     Parameters
     ----------
-    icd : str 
+    icd : str
         ICD-10 code that could not be mapped directly.
     ccsr : pd.DataFrame
         DataFrame containing the official mappings published by CCSR.
@@ -644,7 +644,6 @@ def get_parents(icd, ccsr):
             related.insert(loc=0, column='queried_icd', value=icd)
             return related
     return None
-
 
 
 def get_distantly_related(unmapped, ccsr, verbose):
@@ -711,7 +710,7 @@ def get_distantly_related(unmapped, ccsr, verbose):
 
     related_df = pd.DataFrame([])
 
-    for func in [get_halfsibs,get_cousins,get_extfam]:
+    for func in [get_halfsibs, get_cousins, get_extfam]:
         related = func(unmapped, ccsr)
         if related is not None:
             if related_df.empty:
@@ -732,7 +731,7 @@ def get_halfsibs(icd, ccsr):
 
     Parameters
     ----------
-    icd : str 
+    icd : str
         ICD-10 code that could not be mapped directly.
     ccsr : pd.DataFrame
         DataFrame containing the official mappings published by CCSR.
@@ -771,15 +770,15 @@ def get_halfsibs(icd, ccsr):
     """
     halfsibs = pd.DataFrame([])
     
-    # check whether last 2 digits are within distance of +/- 9 of each other 
+    # check whether last 2 digits are within distance of +/- 9 of each other
     # (only if code has at least 5 characters)
     if len(icd) >= 5:
         # find codes with matching first characters (at least 3) + same number of characters
         halfsibs = ccsr[(ccsr['icd'].str[:-2] == icd[:-2]) & (ccsr['icd'].str.len() == len(icd))]
         # check whether last 2 characters can be converted to integers
-        halfsibs = halfsibs[halfsibs['icd'].str.slice(-2).str.isdigit()] 
+        halfsibs = halfsibs[halfsibs['icd'].str.slice(-2).str.isdigit()]
 
-        if len(halfsibs) > 0: # make sure last 2 characters can be converted to integers
+        if len(halfsibs) > 0:  # make sure last 2 characters can be converted to integers
             halfsibs = halfsibs[abs(halfsibs['icd'].str.slice(-2).astype(int) - int(icd[-2:])) < 10]
 
     if len(halfsibs) == 0:
@@ -799,7 +798,7 @@ def get_cousins(icd, ccsr):
 
     Parameters
     ----------
-    icd : str 
+    icd : str
         ICD-10 code that could not be mapped directly.
     ccsr : pd.DataFrame
         DataFrame containing the official mappings published by CCSR.
@@ -837,7 +836,7 @@ def get_cousins(icd, ccsr):
     """
     cousins = pd.DataFrame([])
 
-    # find codes with matching first 3 characters 
+    # find codes with matching first 3 characters
     cousins = ccsr[(ccsr['icd'].str[:3] == icd[:3])]
 
     if len(cousins) == 0:
@@ -897,7 +896,7 @@ def get_extfam(icd, ccsr):
     """
     extfam = pd.DataFrame([])
 
-    # find codes with matching first 3 characters 
+    # find codes with matching first 3 characters
     extfam = ccsr[(ccsr['icd'].str[:2] == icd[:2])]
 
     if len(extfam) == 0:
