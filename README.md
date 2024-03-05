@@ -12,7 +12,7 @@ Please download (and unzip) or clone the repository to a local directory (`"path
 
 If you encounter an SSL certificate verification error during installation, try running the following: `pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org --user "path/to/gemini-ccsr/"`.
 
-Please make sure all dependencies are installed successfully. You can try running `pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r "path/to/gemini-ccsr/requirements.txt" to install all dependencies.
+Please make sure all dependencies are installed successfully. You can try running `pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r "path/to/gemini-ccsr/requirements.txt"` to install all dependencies.
 
 Finally, to import from this package, you may need to add the install location (found via `pip show gemini-ccsr`) to your $PYTHONPATH so Python knows where to look for it:
 
