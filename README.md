@@ -6,11 +6,24 @@ The code in this repository maps diagnosis codes from International Classificati
 
 Note: The current release is a beta version and is subject to change. 
 
-## Installation & set-up
+## Installation
 
-Please download or clone the repository to a local directory (`<path/to/gemini-ccsr>`). Run `pip3 install --user <path/to/gemini-ccsr>` to install.
+Please download (and unzip) or clone the repository to a local directory (`<path/to/gemini-ccsr>`). Then simply run `pip install --user <local_path/to/gemini-ccsr/>`.
 
-By default, the code will map ICD-10 diagnosis codes to CCSR version v2020-3. To change the CCSR version, please download the latest CCSR categorization file from the [CCSR website](https://www.hcup-us.ahrq.gov/toolssoftware/ccsr/dxccsr.jsp). Please make sure that the CCSR file has been formatted to match the description found in the [documentation](https://rawcdn.githack.com/GEMINI-Medicine/gemini-ccsr/f405fcaa00b994798a0b3d4782be309a27e4c510/docs/build/html/index.html) of the `check_ccsr` function in the `gemini-ccsr formatter` module. You can also check the provided `example_ccsr_v2020-3.csv` file for an example of a correctly formatted CCSR file.
+If you encounter an SSL certificate verification error during installation, try running the following: `pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org --user <local_path/to/gemini-ccsr/>`.
+
+Please make sure all dependencies are installed successfully. You can try running `pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r <local_path/to/gemini-ccsr/requirements.txt/` to install all dependencies.
+
+Finally, to import from this package, you may need to add the install location (found via `pip show gemini-ccsr`) to your $PYTHONPATH so Python knows where to look for it:
+
+```
+import sys
+sys.path.append('<local_path/from/pip_show_gemini-ccsr/')
+```
+
+## Official CCSR tool
+
+By default, the code will map ICD-10 diagnosis codes based on the official CCSR version v2020-3. To change the CCSR version, please download the latest CCSR categorization file from the [CCSR website](https://www.hcup-us.ahrq.gov/toolssoftware/ccsr/dxccsr.jsp). Please make sure that the CCSR file has been formatted to match the description found in the [documentation](https://rawcdn.githack.com/GEMINI-Medicine/gemini-ccsr/f405fcaa00b994798a0b3d4782be309a27e4c510/docs/build/html/index.html) of the `check_ccsr` function in the `gemini-ccsr formatter` module. You can also check the provided `example_ccsr_v2020-3.csv` file for an example of a correctly formatted CCSR file.
 
 ## Usage
 
