@@ -8,18 +8,24 @@ Note: The current release is a beta version and is subject to change.
 
 ## Installation
 
-Please download (and unzip) or clone the repository to a local directory (`<path/to/gemini-ccsr>`). Then simply run `pip install --user <local_path/to/gemini-ccsr/>`.
+Please download (and unzip) or clone the repository to a local directory (`"path/to/gemini-ccsr"`). Then simply run `pip install --user "path/to/gemini-ccsr/"`.
 
-If you encounter an SSL certificate verification error during installation, try running the following: `pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org --user <local_path/to/gemini-ccsr/>`.
+If you encounter an SSL certificate verification error during installation, try running the following: `pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org --user "path/to/gemini-ccsr/"`.
 
-Please make sure all dependencies are installed successfully. You can try running `pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r <local_path/to/gemini-ccsr/requirements.txt/` to install all dependencies.
+Please make sure all dependencies are installed successfully. You can try running `pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org -r "path/to/gemini-ccsr/requirements.txt" to install all dependencies.
 
 Finally, to import from this package, you may need to add the install location (found via `pip show gemini-ccsr`) to your $PYTHONPATH so Python knows where to look for it:
 
 ```
 import sys
-sys.path.append('<local_path/from/pip_show_gemini-ccsr/')
+sys.path.append("path/from/pip_show_gemini-ccsr/")
+
+from gemini_ccsr.main import map_icd_to_ccsr
 ```
+
+If you have trouble installing the package, you can also use `sys.path.append("path/to/gemini-ccsr")` to direct Python to the path where you saved the repository (instead of the install location).
+In this case, the dependencies `numpy`, `pandas`, `tqdm`, and `time` will still need to be installed.
+
 
 ## Official CCSR tool
 
