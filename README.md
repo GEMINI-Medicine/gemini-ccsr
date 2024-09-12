@@ -1,6 +1,6 @@
 [![Python application](https://github.com/GEMINI-Medicine/gemini-ccsr/actions/workflows/python-app.yml/badge.svg)](https://github.com/GEMINI-Medicine/gemini-ccsr/actions/workflows/python-app.yml)
 
-# GEMINI: CCSR mapping code (beta version)
+# GEMINI: CCSR mapping code
 
 The code in this repository maps diagnosis codes from International Classification of Diseases 10th Revision (ICD-10) codes to Clinical Classifications Software Refined (CCSR) categories. For more details, please refer to this paper [Malecki et al. (2022)](https://medrxiv.org/cgi/content/short/2022.11.29.22282888v1) and review the [code documentation](https://rawcdn.githack.com/GEMINI-Medicine/gemini-ccsr/f405fcaa00b994798a0b3d4782be309a27e4c510/docs/build/html/index.html).
 
@@ -61,5 +61,5 @@ For a more detailed example, check `run_example.py` to map the list of ICD-10 di
 [MIT license](https://github.com/GEMINI-Medicine/gemini-ccsr/blob/master/LICENSE)
 
 ## Versions
-+ Version v1.0.1-beta - January 2023 (current version)
++ Version v1.0.1 - January 2023 (current version)
 + Version v1.0.0-beta - November 2022
