@@ -50,12 +50,12 @@ direct, automatic, semiautomatic, failed = map_icd_to_ccsr(icd, ccsr)
 
 For a more detailed example, check `run_example.py` to map the list of ICD-10 diagnosis codes in `example_codes_to_map.csv`. 
 
-**Important:** Please carefully read the [documentation](https://rawcdn.githack.com/GEMINI-Medicine/gemini-ccsr/f405fcaa00b994798a0b3d4782be309a27e4c510/docs/build/html/index.html) for the main `map_icd_to_ccsr` function for a description of the 4 different data frames that are returned by the algorithm (`direct`, `automatic`, `semiautomatic`, and `failed`). Codes that are returned in the `semiautomatic`/`failed` data frames will need to be carefully reviewed by a clinical expert, and may need to be corrected or mapped manually. Similarly, although `automatic` mappings have been shown to be highly accurate in a sample of Canadian ICD-10 codes (see [Malecki et al., 2022)](https://medrxiv.org/cgi/content/short/2022.11.29.22282888v1), we recommend careful inspection of **all** mappings by a subject matter expert. 
+**Important:** Please carefully read the [documentation](https://rawcdn.githack.com/GEMINI-Medicine/gemini-ccsr/f405fcaa00b994798a0b3d4782be309a27e4c510/docs/build/html/index.html) for the main `map_icd_to_ccsr` function for a description of the 4 different data frames that are returned by the algorithm (`direct`, `automatic`, `semiautomatic`, and `failed`). Codes that are returned in the `semiautomatic`/`failed` data frames will need to be carefully reviewed by a clinical expert, and may need to be corrected or mapped manually. Similarly, although `automatic` mappings have been shown to be highly accurate in a sample of Canadian ICD-10 codes (see [Malecki et al., 2024)](https://www.sciencedirect.com/science/article/pii/S1386505624001710), we recommend careful inspection of **all** mappings by a subject matter expert. 
 
 
 ## Citation
 
-[Malecki et al. (2022). Tools for categorization of diagnostic codes in hospital data: Operationalizing CCSR into a patient data repository.](https://medrxiv.org/cgi/content/short/2022.11.29.22282888v1)
+[Malecki et al. (2024). Development and external validation of tools for categorizing diagnosis codes in international hospital data.](https://www.sciencedirect.com/science/article/pii/S1386505624001710)
 
 ## License
 [MIT license](https://github.com/GEMINI-Medicine/gemini-ccsr/blob/master/LICENSE)
