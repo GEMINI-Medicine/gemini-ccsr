@@ -176,7 +176,7 @@ def add_default(output_ccsr, official_ccsr):
     for icd in iterator:
 
         # if only 1 shared category (CCSR1, but not CCSR2) -> use that one as default
-        if pd.isnull(output_ccsr.loc[output_ccsr['queried_icd'] == icd, 'ccsr_2']).bool():
+        if pd.isnull(output_ccsr.loc[output_ccsr['queried_icd'] == icd, 'ccsr_2']).iloc[0]:
             output_ccsr.loc[output_ccsr['queried_icd'] == icd, 'ccsr_def'] = output_ccsr.loc[
                 output_ccsr['queried_icd'] == icd, 'ccsr_1']
 
