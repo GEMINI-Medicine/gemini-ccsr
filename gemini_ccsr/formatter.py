@@ -160,39 +160,37 @@ def add_default(output_ccsr, official_ccsr):
         column added.
     """
 
-    output_ccsr = output_ccsr.copy()
-    default_map = get_default_map(official_ccsr)
+    output_ccsr = output_ccsr.copy()   
     ccsr_cols = ['ccsr_{}'.format(i) for i in range(1, 7)]
+    
     # add all mapped CCSR1-6 codes as tuple in last column
     output_ccsr['ccsr_tup'] = output_ccsr[ccsr_cols].apply(
         lambda row: tuple(sorted(row[row.notna()].to_list())), axis=1)
 
-    # replace with None if specified key does not exist in default map
-    output_ccsr['ccsr_def'] = output_ccsr['ccsr_tup'].apply(
-        lambda tup: default_map.get(tup, None))
-
-    iterator = output_ccsr.loc[output_ccsr['ccsr_def'].isna(), 'queried_icd']
-
+    ## get default map based on all combinations of CCSR 1-6
+    ## deprecated!: We now just check for most frequent CCSR default among related codes specifically (see below)
+    # default_map = get_default_map(official_ccsr.loc[official_ccsr['icd'].isin(rel_tup)])
+        
+    ## get default CCSRs from all related codes
+    iterator = output_ccsr['queried_icd']
     for icd in iterator:
 
-        # if only 1 shared category (CCSR1, but not CCSR2) -> use that one as default
-        if pd.isnull(output_ccsr.loc[output_ccsr['queried_icd'] == icd, 'ccsr_2']).iloc[0]:
-            output_ccsr.loc[output_ccsr['queried_icd'] == icd, 'ccsr_def'] = output_ccsr.loc[
-                output_ccsr['queried_icd'] == icd, 'ccsr_1']
+        # find related codes
+        rel_tup = output_ccsr.loc[output_ccsr['queried_icd'] == icd]['related_codes'].values[0]
 
-        # if more than one shared category, which one of shared categories is most commonly default among related codes?
-        else:
-            rel_tup = output_ccsr.loc[output_ccsr['queried_icd'] == icd]['related_codes'].values[0]
-            rel = official_ccsr.loc[official_ccsr['icd'].isin(rel_tup)]
-
-            # get categories that are shared between all related codes
-            shared_cat = output_ccsr.loc[output_ccsr['queried_icd'] == icd, 'ccsr_tup'].values[0]
-            # are any of the shared categories default categories? If yes, which one most frequent one?
-            shared_def = rel.loc[rel['ccsr_def'].isin(shared_cat), 'ccsr_def']
-            if not shared_def.empty:
-                output_ccsr.loc[
-                    output_ccsr['queried_icd'] == icd, 'ccsr_def'] = shared_def.value_counts().sort_values(
-                        ascending=False).index[0]
+        # which of the shared CCSR 1-6 categories is most frequently the default category among related codes?
+        rel = official_ccsr.loc[official_ccsr['icd'].isin(rel_tup)]
+        
+        # get categories that are shared between all related codes
+        shared_cat = list(output_ccsr.loc[output_ccsr['queried_icd'] == icd, 'ccsr_tup'].values[0])
+        shared_cat.append('XXX000') # append invalid PDX in case that's default category among related codes
+        
+        # are any of the shared categories default categories? If yes, which one most frequent one?
+        shared_def = rel.loc[rel['ccsr_def'].isin(shared_cat), 'ccsr_def']
+        if not shared_def.empty:
+            output_ccsr.loc[
+                output_ccsr['queried_icd'] == icd, 'ccsr_def'] = shared_def.value_counts().sort_values(
+                    ascending=False).index[0]
 
     output_ccsr = output_ccsr.drop(columns=['ccsr_tup'])
 
