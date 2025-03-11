@@ -58,5 +58,5 @@ For a more detailed example, check `run_example.py` to map the list of ICD-10 di
 [Malecki et al. (2024). Development and external validation of tools for categorizing diagnosis codes in international hospital data.](https://www.sciencedirect.com/science/article/pii/S1386505624001710)
 
 ## License
-[MIT license](https://github.com/GEMINI-Medicine/gemini-ccsr/blob/master/LICENSE)
+[MIT license](https://github.com/GEMINI-Medicine/gemini-ccsr/blob/main/LICENSE)
 
