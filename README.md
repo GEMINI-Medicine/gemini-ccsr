@@ -2,7 +2,7 @@
 
 # GEMINI: CCSR mapping code
 
-The code in this repository maps diagnosis codes from International Classification of Diseases 10th Revision (ICD-10) codes to Clinical Classifications Software Refined (CCSR) categories. For more details, please refer to this paper [Malecki et al. (2022)](https://medrxiv.org/cgi/content/short/2022.11.29.22282888v1) and review the [code documentation](https://rawcdn.githack.com/GEMINI-Medicine/gemini-ccsr/f405fcaa00b994798a0b3d4782be309a27e4c510/docs/build/html/index.html).
+The code in this repository maps diagnosis codes from International Classification of Diseases 10th Revision (ICD-10) codes to Clinical Classifications Software Refined (CCSR) categories. For more details, please refer to this paper [Malecki et al. (2024)](https://www.sciencedirect.com/science/article/pii/S1386505624001710) and review the [code documentation](https://rawcdn.githack.com/GEMINI-Medicine/gemini-ccsr/f405fcaa00b994798a0b3d4782be309a27e4c510/docs/build/html/index.html).
 
 Note: The current release is a beta version and is subject to change. 
 
@@ -58,8 +58,5 @@ For a more detailed example, check `run_example.py` to map the list of ICD-10 di
 [Malecki et al. (2024). Development and external validation of tools for categorizing diagnosis codes in international hospital data.](https://www.sciencedirect.com/science/article/pii/S1386505624001710)
 
 ## License
-[MIT license](https://github.com/GEMINI-Medicine/gemini-ccsr/blob/master/LICENSE)
+[MIT license](https://github.com/GEMINI-Medicine/gemini-ccsr/blob/main/LICENSE)
 
-## Versions
-+ Version v1.0.1 - January 2023 (current version)
-+ Version v1.0.0-beta - November 2022

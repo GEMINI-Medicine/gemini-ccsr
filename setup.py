@@ -6,7 +6,7 @@ with open('README.md', 'r', encoding='utf-8') as f:
 setup(
   name='gemini-ccsr',
   packages=['gemini_ccsr'],
-  version='1.0.1',
+  version='1.0.2',
   license='MIT',
   description='Maps ICD-10 codes to CCSR categories.',
   long_description=long_description,
