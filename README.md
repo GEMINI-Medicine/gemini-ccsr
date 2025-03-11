@@ -2,9 +2,7 @@
 
 # GEMINI: CCSR mapping code
 
-The code in this repository maps diagnosis codes from International Classification of Diseases 10th Revision (ICD-10) codes to Clinical Classifications Software Refined (CCSR) categories. For more details, please refer to this paper [Malecki et al. (2024)](https://www.sciencedirect.com/science/article/pii/S1386505624001710) and review the [code documentation](https://rawcdn.githack.com/GEMINI-Medicine/gemini-ccsr/f405fcaa00b994798a0b3d4782be309a27e4c510/docs/build/html/index.html).
-
-Note: The current release is a beta version and is subject to change. 
+The code in this repository maps diagnosis codes from International Classification of Diseases 10th Revision (ICD-10) codes to Clinical Classifications Software Refined (CCSR) categories. For more details, please refer to this paper [Malecki et al. (2024)](https://www.sciencedirect.com/science/article/pii/S1386505624001710) and review the [code documentation](https://rawcdn.githack.com/GEMINI-Medicine/gemini-ccsr/da295728ade888f96b5a1f9f3b5ed99464651f08/docs/build/index.html).
 
 ## Installation
 
@@ -29,7 +27,7 @@ In this case, the dependencies `numpy`, `pandas`, `tqdm`, and `time` will still 
 
 ## Official CCSR tool
 
-By default, the code will map ICD-10 diagnosis codes based on the official CCSR version v2020-3. To change the CCSR version, please download the latest CCSR categorization file from the [CCSR website](https://www.hcup-us.ahrq.gov/toolssoftware/ccsr/dxccsr.jsp). Please make sure that the CCSR file has been formatted to match the description found in the [documentation](https://rawcdn.githack.com/GEMINI-Medicine/gemini-ccsr/f405fcaa00b994798a0b3d4782be309a27e4c510/docs/build/html/index.html) of the `check_ccsr` function in the `gemini-ccsr formatter` module. You can also check the provided `example_ccsr_v2020-3.csv` file for an example of a correctly formatted CCSR file.
+By default, the code will map ICD-10 diagnosis codes based on the official CCSR version v2020-3. To change the CCSR version, please download the latest CCSR categorization file from the [CCSR website](https://www.hcup-us.ahrq.gov/toolssoftware/ccsr/dxccsr.jsp). Please make sure that the CCSR file has been formatted to match the description found in the [documentation](https://rawcdn.githack.com/GEMINI-Medicine/gemini-ccsr/da295728ade888f96b5a1f9f3b5ed99464651f08/docs/build/index.html) of the `check_ccsr` function in the `gemini-ccsr formatter` module. You can also check the provided `example_ccsr_v2020-3.csv` file for an example of a correctly formatted CCSR file.
 
 ## Usage
 
@@ -50,7 +48,7 @@ direct, automatic, semiautomatic, failed = map_icd_to_ccsr(icd, ccsr)
 
 For a more detailed example, check `run_example.py` to map the list of ICD-10 diagnosis codes in `example_codes_to_map.csv`. 
 
-**Important:** Please carefully read the [documentation](https://rawcdn.githack.com/GEMINI-Medicine/gemini-ccsr/f405fcaa00b994798a0b3d4782be309a27e4c510/docs/build/html/index.html) for the main `map_icd_to_ccsr` function for a description of the 4 different data frames that are returned by the algorithm (`direct`, `automatic`, `semiautomatic`, and `failed`). Codes that are returned in the `semiautomatic`/`failed` data frames will need to be carefully reviewed by a clinical expert, and may need to be corrected or mapped manually. Similarly, although `automatic` mappings have been shown to be highly accurate in a sample of Canadian ICD-10 codes (see [Malecki et al., 2024)](https://www.sciencedirect.com/science/article/pii/S1386505624001710), we recommend careful inspection of **all** mappings by a subject matter expert. 
+**Important:** Please carefully read the [documentation](https://rawcdn.githack.com/GEMINI-Medicine/gemini-ccsr/da295728ade888f96b5a1f9f3b5ed99464651f08/docs/build/index.html) for the main `map_icd_to_ccsr` function for a description of the 4 different data frames that are returned by the algorithm (`direct`, `automatic`, `semiautomatic`, and `failed`). Codes that are returned in the `semiautomatic`/`failed` data frames will need to be carefully reviewed by a clinical expert, and may need to be corrected or mapped manually. Similarly, although `automatic` mappings have been shown to be highly accurate in a sample of Canadian ICD-10 codes (see [Malecki et al., 2024)](https://www.sciencedirect.com/science/article/pii/S1386505624001710), we recommend careful inspection of **all** mappings by a subject matter expert. 
 
 
 ## Citation
