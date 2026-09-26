@@ -1,5 +1,6 @@
 [![Python application](https://github.com)](https://github.com/GEMINI-Medicine/gemini-ccsr/actions/workflows/python-app.yml)
 
+
 # GEMINI: CCSR mapping code
 
 The code in this repository maps diagnosis codes from the International Classification of Diseases 10th Revision, Canadian version (ICD-10-CA) to broader, more clinically meaningful categories defined by the Clinical Classifications Software Refined (CCSR). For more details, please refer to this paper [Malecki et al. (2024)](https://www.sciencedirect.com/science/article/pii/S1386505624001710) and review the [code documentation](https://rawcdn.githack.com/GEMINI-Medicine/gemini-ccsr/da295728ade888f96b5a1f9f3b5ed99464651f08/docs/build/index.html).
