@@ -1,5 +1,4 @@
-[![Python application](https://github.com)](https://github.com/GEMINI-Medicine/gemini-ccsr/actions/workflows/python-app.yml)
-
+[![Python application](https://github.com/GEMINI-Medicine/gemini-ccsr/actions/workflows/python-app.yml/badge.svg)](https://github.com/GEMINI-Medicine/gemini-ccsr/actions/workflows/python-app.yml)
 
 # GEMINI: CCSR mapping code
 
